@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 17, 2026 at 08:14 PM
+-- Generation Time: May 18, 2026 at 05:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -86,7 +86,8 @@ CREATE TABLE `supplier` (
   `id_supplier` int(11) NOT NULL,
   `nama_supplier` varchar(50) DEFAULT NULL,
   `alamat_supplier` varchar(50) DEFAULT NULL,
-  `kontak_supplier` int(11) DEFAULT NULL
+  `kontak_supplier` int(11) DEFAULT NULL,
+  `id_pengguna` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -125,7 +126,8 @@ ALTER TABLE `produk`
 -- Indexes for table `supplier`
 --
 ALTER TABLE `supplier`
-  ADD PRIMARY KEY (`id_supplier`);
+  ADD PRIMARY KEY (`id_supplier`),
+  ADD KEY `fk_supplier_pengguna` (`id_pengguna`);
 
 --
 -- Constraints for dumped tables
@@ -154,6 +156,12 @@ ALTER TABLE `laporan_penjualan`
 --
 ALTER TABLE `produk`
   ADD CONSTRAINT `fk_produk_supplier` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`id_supplier`);
+
+--
+-- Constraints for table `supplier`
+--
+ALTER TABLE `supplier`
+  ADD CONSTRAINT `fk_supplier_pengguna` FOREIGN KEY (`id_pengguna`) REFERENCES `penjualan`.`pengguna` (`id_pengguna`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
