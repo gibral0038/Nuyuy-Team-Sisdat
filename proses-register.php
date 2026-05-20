@@ -1,16 +1,4 @@
 <?php
-
-// 1. Mulai session wajib di setiap halaman yang diproteksi
-session_start();
-
-// 2. Cek apakah variabel session 'id_pengguna' TIDAK ADA (!isset)
-// Artinya, dia belum melewati proses-login.php dengan sukses
-if (!isset($_SESSION['id_pengguna'])) {
-    // Tendang otomatis ke halaman login
-    header("Location: login.php");
-    exit(); // Hentikan eksekusi kode di bawahnya
-}
-
 // 1. Hubungkan ke database lewat koneksi.php
 include("koneksi.php");
 

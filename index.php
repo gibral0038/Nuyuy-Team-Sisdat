@@ -1,4 +1,15 @@
 <?php 
+// 1. Mulai session wajib di setiap halaman yang diproteksi
+session_start();
+
+// 2. Cek apakah variabel session 'id_pengguna' TIDAK ADA (!isset)
+// Artinya, dia belum melewati proses-login.php dengan sukses
+if (!isset($_SESSION['id_pengguna'])) {
+    // Tendang otomatis ke halaman login
+    header("Location: login-page.php");
+    exit(); // Hentikan eksekusi kode di bawahnya
+}
+
 include("koneksi.php"); 
 
 // Mengambil data ringkasan untuk dashboard (Opsional, agar halaman terlihat dinamis)
@@ -27,6 +38,14 @@ $best_seller = mysqli_fetch_array($query_best);
         .info-box { background-color: #f4f4f4; padding: 15px; border-radius: 5px; margin-top: 20px; border-left: 5px solid #28a745; }
     </style>
 </head>
+<nav>
+    <ul>
+        <li><a href="form-pesan.php">🛒 Buat Pesanan Baru</a></li>
+        <li><a href="status-pesanan.php">📋 Lihat Riwayat & Status Pesanan</a></li>
+        
+        <li><a href="logout.php" style="color: red; font-weight: bold;">🚪 Keluar (Logout)</a></li>
+    </ul>
+</nav>
 <body>
 
     <header>
