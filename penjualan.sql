@@ -18,36 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `penjualan`
+-- Memastikan Database `db_penjualan` Terbuat dan Terpilih Otomatis
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `detail_pesanan`
---
-
-CREATE TABLE `detail_pesanan` (
-  `id_detail_pesanan` int(11) NOT NULL,
-  `id_pesanan` int(11) DEFAULT NULL,
-  `id_produk` int(11) DEFAULT NULL,
-  `jumlah` int(11) DEFAULT NULL,
-  `harga_total` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pembayaran`
---
-
-CREATE TABLE `pembayaran` (
-  `id_pembayaran` int(11) NOT NULL,
-  `id_pesanan` int(11) DEFAULT NULL,
-  `metode_pembayaran` varchar(50) DEFAULT NULL,
-  `tanggal_pembayaran` date DEFAULT NULL,
-  `jumlah_pembayaran` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `db_penjualan`;
+USE `db_penjualan`;
 
 -- --------------------------------------------------------
 
@@ -56,11 +30,12 @@ CREATE TABLE `pembayaran` (
 --
 
 CREATE TABLE `pengguna` (
-  `id_pengguna` int(11) NOT NULL,
+  `id_pengguna` int(11) NOT NULL AUTO_INCREMENT, -- Ditambahkan Auto Increment
   `nama_pengguna` varchar(50) DEFAULT NULL,
   `email_pengguna` varchar(50) DEFAULT NULL,
-  `password_pengguna` varchar(50) DEFAULT NULL,
-  `role_pengguna` enum('admin','customer','supplier') DEFAULT NULL
+  `password_pengguna` varchar(255) DEFAULT NULL, -- Diubah ke 255 agar muat jika password di-hash (keamanan standar)
+  `role_pengguna` enum('admin','customer','supplier') DEFAULT NULL,
+  PRIMARY KEY (`id_pengguna`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -70,66 +45,63 @@ CREATE TABLE `pengguna` (
 --
 
 CREATE TABLE `pesanan` (
-  `id_pesanan` int(11) NOT NULL,
+  `id_pesanan` int(11) NOT NULL AUTO_INCREMENT, -- Ditambahkan Auto Increment
   `id_pengguna` int(11) DEFAULT NULL,
   `tanggal_pesanan` date DEFAULT NULL,
-  `status_pesanan` enum('pending','diproses','selesai') DEFAULT NULL
+  `status_pesanan` enum('pending','diproses','selesai') DEFAULT NULL,
+  PRIMARY KEY (`id_pesanan`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detail_pesanan`
+--
+
+CREATE TABLE `detail_pesanan` (
+  `id_detail_pesanan` int(11) NOT NULL AUTO_INCREMENT, -- Ditambahkan Auto Increment
+  `id_pesanan` int(11) DEFAULT NULL,
+  `id_produk` int(11) DEFAULT NULL, -- Tetap ada untuk relasi logis ke db_gudang
+  `jumlah` int(11) DEFAULT NULL,
+  `harga_total` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_detail_pesanan`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembayaran`
+--
+
+CREATE TABLE `pembayaran` (
+  `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT, -- Ditambahkan Auto Increment
+  `id_pesanan` int(11) DEFAULT NULL,
+  `metode_pembayaran` varchar(50) DEFAULT NULL,
+  `tanggal_pembayaran` date DEFAULT NULL,
+  `jumlah_pembayaran` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_pembayaran`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indexes for dumped tables
+-- Indexes untuk Relasi Internal db_penjualan
 --
+ALTER TABLE `detail_pesanan` ADD KEY `fk_detail_pesanan_pesanan` (`id_pesanan`);
+ALTER TABLE `detail_pesanan` ADD KEY `fk_detail_pesanan_produk` (`id_produk`);
+ALTER TABLE `pembayaran` ADD KEY `fk_pembayaran_pesanan` (`id_pesanan`);
+ALTER TABLE `pesanan` ADD KEY `fk_pesanan_pengguna` (`id_pengguna`);
 
 --
--- Indexes for table `detail_pesanan`
+-- Aturan Foreign Key Fisik (Hanya yang lokal di dalam db_penjualan)
 --
 ALTER TABLE `detail_pesanan`
-  ADD PRIMARY KEY (`id_detail_pesanan`),
-  ADD KEY `fk_detail_pesanan_pesanan` (`id_pesanan`),
-  ADD KEY `fk_detail_pesanan_produk` (`id_produk`);
+  ADD CONSTRAINT `fk_detail_pesanan_pesanan` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Indexes for table `pembayaran`
---
 ALTER TABLE `pembayaran`
-  ADD PRIMARY KEY (`id_pembayaran`),
-  ADD KEY `fk_pembayaran_pesanan` (`id_pesanan`);
+  ADD CONSTRAINT `fk_pembayaran_pesanan` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Indexes for table `pengguna`
---
-ALTER TABLE `pengguna`
-  ADD PRIMARY KEY (`id_pengguna`);
-
---
--- Indexes for table `pesanan`
---
 ALTER TABLE `pesanan`
-  ADD PRIMARY KEY (`id_pesanan`),
-  ADD KEY `fk_pesanan_pengguna` (`id_pengguna`);
+  ADD CONSTRAINT `fk_pesanan_pengguna` FOREIGN KEY (`id_pengguna`) REFERENCES `pengguna` (`id_pengguna`) ON DELETE SET NULL ON UPDATE CASCADE;
 
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `detail_pesanan`
---
-ALTER TABLE `detail_pesanan`
-  ADD CONSTRAINT `fk_detail_pesanan_pesanan` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`),
-  ADD CONSTRAINT `fk_detail_pesanan_produk` FOREIGN KEY (`id_produk`) REFERENCES `gudang`.`produk` (`id_produk`);
-
---
--- Constraints for table `pembayaran`
---
-ALTER TABLE `pembayaran`
-  ADD CONSTRAINT `fk_pembayaran_pesanan` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`);
-
---
--- Constraints for table `pesanan`
---
-ALTER TABLE `pesanan`
-  ADD CONSTRAINT `fk_pesanan_pengguna` FOREIGN KEY (`id_pengguna`) REFERENCES `pengguna` (`id_pengguna`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
