@@ -2,23 +2,23 @@
 // 1. Mulai session wajib di setiap halaman yang diproteksi
 session_start();
 
-// 2. Cek apakah variabel session 'id_pengguna' TIDAK ADA (!isset)
+// 2. Cek apakah variabel session 'email_pengguna' TIDAK ADA (!isset)
 // Artinya, dia belum melewati proses-login.php dengan sukses
-if (!isset($_SESSION['id_pengguna'])) {
+if (!isset($_SESSION['email_pengguna'])) {
     // Tendang otomatis ke halaman login
     header("Location: login-page.php");
     exit(); // Hentikan eksekusi kode di bawahnya
 }
 
-include("koneksi.php"); 
+include("../backend/koneksi.php"); 
 
 // Mengambil data ringkasan untuk dashboard (Opsional, agar halaman terlihat dinamis)
 // 1. Hitung total pesanan dari DB Penjualan
-$query_pesanan = mysqli_query($conn_penjualan, "SELECT id FROM pesanan");
+$query_pesanan = mysqli_query($conn_penjualan, "SELECT id_pengguna FROM pesanan");
 $total_pesanan = mysqli_num_rows($query_pesanan);
 
 // 2. Ambil produk terlaris saat ini dari DB Gudang (Tahap 3 dari desainmu)
-$query_best = mysqli_query($conn_gudang, "SELECT id_produk, total_terjual FROM best_seller ORDER BY total_terjual DESC LIMIT 1");
+$query_best = mysqli_query($conn_gudang, "SELECT id_produk, jumlah_terjual FROM best_seller ORDER BY jumlah_terjual DESC LIMIT 1");
 $best_seller = mysqli_fetch_array($query_best);
 ?>
 
@@ -40,10 +40,7 @@ $best_seller = mysqli_fetch_array($query_best);
 </head>
 <nav>
     <ul>
-        <li><a href="form-pesan.php">🛒 Buat Pesanan Baru</a></li>
-        <li><a href="status-pesanan.php">📋 Lihat Riwayat & Status Pesanan</a></li>
-        
-        <li><a href="logout.php" style="color: red; font-weight: bold;">🚪 Keluar (Logout)</a></li>
+        <li><a href="../backend/logout.php" style="color: red; font-weight: bold;">🚪 Keluar (Logout)</a></li>
     </ul>
 </nav>
 <body>
@@ -57,7 +54,7 @@ $best_seller = mysqli_fetch_array($query_best);
     <nav>
         <ul>
             <li><a href="form-pesan.php">🛒 Buat Pesanan Baru</a></li>
-            <li><a href="status-pesanan.php">📋 Lihat Riwayat & Status Pesanan</a></li>
+            <li><a href="../backend/status-pesanan.php">📋 Lihat Riwayat & Status Pesanan</a></li>
         </ul>
     </nav>
 

@@ -3,10 +3,15 @@
 <head>
     <title>Form Login Pengguna</title>
 </head>
+<nav>
+    <ul>
+        <li><a href="login-page.php" style="color: red; font-weight: bold;">Login</a></li>
+    </ul>
+</nav>
 <body>
     <h3>Form Register Pengguna</h3>
     <!-- Data dikirim ke file proses-register.php -->
-    <form action="proses-register.php" method="POST">
+    <form action="../backend/proses-register.php" method="POST">
         <p>
             <label for="id_pengguna">ID Pengguna: </label>
             <input type="number" name="id_pengguna" placeholder="Masukkan ID Pengguna" required />

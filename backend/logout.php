@@ -9,6 +9,6 @@ session_unset();
 session_destroy();
 
 // 4. Alihkan pengguna kembali ke halaman login utama kelompokmu
-header("Location: login-page.php");
+header("Location: ../frontend/login-page.php");
 exit();
 ?>

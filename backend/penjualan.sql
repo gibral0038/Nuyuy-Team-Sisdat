@@ -32,7 +32,7 @@ USE `db_penjualan`;
 CREATE TABLE `pengguna` (
   `id_pengguna` int(11) NOT NULL AUTO_INCREMENT, -- Ditambahkan Auto Increment
   `nama_pengguna` varchar(50) DEFAULT NULL,
-  `email_pengguna` varchar(50) DEFAULT NULL,
+  `email_pengguna` varchar(50) NOT NULL,
   `password_pengguna` varchar(255) DEFAULT NULL, -- Diubah ke 255 agar muat jika password di-hash (keamanan standar)
   `role_pengguna` enum('admin','customer','supplier') DEFAULT NULL,
   PRIMARY KEY (`id_pengguna`)

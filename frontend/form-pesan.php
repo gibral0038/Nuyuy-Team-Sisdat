@@ -6,7 +6,7 @@
 <body>
     <h3>Form Pemesanan Menu</h3>
     <!-- Data dikirim ke file proses-pesan.php -->
-    <form action="proses-pesan.php" method="POST">
+    <form action="../backend/proses-pesan.php" method="POST">
         <p>
             <label for="id_produk">ID Produk (Menu): </label>
             <input type="number" name="id_produk" placeholder="Masukkan ID Produk" required />

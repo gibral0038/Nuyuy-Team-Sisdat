@@ -9,7 +9,7 @@
     <h3>Riwayat Pemesanan Anda</h3>
 
     <nav>
-        <a href="form-pesan.php">[+] Tambah Pesanan Baru</a>
+        <a href="../frontend/form-pesan.php">[+] Tambah Pesanan Baru</a>
     </nav>
 
     <br>
@@ -27,16 +27,16 @@
 
         <?php
         // Mengambil data dari tabel detail_pesanan & pesanan di DB Penjualan
-        $sql = "SELECT pesanan.id, detail_pesanan.id_produk, detail_pesanan.jumlah, pesanan.status 
-                FROM pesanan 
-                JOIN detail_pesanan ON pesanan.id = detail_pesanan.id_pesanan";
+        $sql = "SELECT pn.id_pesanan, dp.id_produk, dp.jumlah, pn.status_pesanan AS status 
+                FROM pesanan pn 
+                JOIN detail_pesanan dp ON pn.id_pesanan = dp.id_pesanan";
         
         $query = mysqli_query($conn_penjualan, $sql);
 
         // Tampilkan semua data menggunakan looping while (Standar Petanikode)
         while($pesanan = mysqli_fetch_array($query)){
             echo "<tr>";
-            echo "<td>".$pesanan['id']."</td>";
+            echo "<td>".$pesanan['id_pesanan']."</td>";
             echo "<td>".$pesanan['id_produk']."</td>";
             echo "<td>".$pesanan['jumlah']."</td>";
             echo "<td><b>".$pesanan['status']."</b></td>";
