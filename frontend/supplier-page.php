@@ -4,7 +4,7 @@
         exit();
     }
     $id_supplier_aktif = $_SESSION['id_pengguna'];
-    include (../backend/koneksi.hpp);
+    include ("../backend/koneksi.hpp");
     $queryProduk = mysqli_query($conn_gudang, "SELECT * FROM produk pd JOIN supplier sp ON pd.id_supplier = sp.id_supplier");
 ?>
 

@@ -10,6 +10,17 @@ if (!isset($_SESSION['email_pengguna'])) {
     exit(); // Hentikan eksekusi kode di bawahnya
 }
 
+if (isset($_SESSION['role_pengguna'])) {
+    $role_aktif = strtolower($_SESSION['role_pengguna']);
+    if ($role_aktif == 'admin') {
+        header("Location: admin-page.php");
+        exit();
+    } else if ($role_aktif == 'supplier') {
+        header("Location: supplier-page.php");
+        exit();
+    }
+}
+
 include("../backend/koneksi.php"); 
 
 // Mengambil data ringkasan untuk dashboard (Opsional, agar halaman terlihat dinamis)
@@ -68,7 +79,7 @@ $best_seller = mysqli_fetch_array($query_best);
                     <strong>
                         <?php 
                         if ($best_seller) {
-                            echo "ID Produk: " . $best_seller['id_produk'] . " (Terjual: " . $best_seller['total_terjual'] . ")";
+                            echo "ID Produk: " . $best_seller['id_produk'] . " (Terjual: " . $best_seller['jumlah_terjual'] . ")";
                         } else {
                             echo "Belum ada data analisis best seller.";
                         }

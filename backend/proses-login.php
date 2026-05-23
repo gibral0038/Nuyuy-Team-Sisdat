@@ -26,13 +26,18 @@ if (isset($_POST['login'])) {
         $_SESSION['email_pengguna'] = $data_user['email_pengguna'];
         $_SESSION['role_pengguna'] = $data_user['role_pengguna'];
 
+        $role_check = strtolower($data_user['role_pengguna']);
+
         // Lempar ke halaman utama (index.php)
-        if ($data_user['role_pengguna'] == 'admin') {
+        if ($role_check == 'admin') {
             header("Location: ../frontend/admin-page.php");
-        } else if ($data_user['role_pengguna'] == 'supplier') {
+            exit();
+        } else if ($role_check == 'supplier') {
             header("Location: ../frontend/supplier-page.php");
+            exit();
         } else {
             header("Location: ../frontend/index.php");
+            exit();
         }
         exit();
     } else {
