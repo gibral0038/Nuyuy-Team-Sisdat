@@ -21,8 +21,8 @@
             <input type="text" name="nama_pengguna" placeholder="Masukkan Nama" required />
         </p>
         <p>
-            <label for="email">Email: </label>
-            <input type="email" name="email" placeholder="Masukkan Email" required />
+            <label for="email_pengguna">Email: </label>
+            <input type="email" name="email_pengguna" placeholder="Masukkan Email" required />
         </p>
         <p>
             <label for="password">Password: </label>

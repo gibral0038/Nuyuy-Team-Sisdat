@@ -9,7 +9,7 @@ if (isset($_POST['register'])) {
     // 2. Tangkap data yang diinput oleh user
     $id_pengguna = $_POST['id_pengguna'];
     $nama_pengguna = $_POST['nama_pengguna'];
-    $email = $_POST['email'];
+    $email = $_POST['email_pengguna'];
     $password = $_POST['password'];
     $role_pengguna = $_POST['role_pengguna'];
 
@@ -23,7 +23,7 @@ if (isset($_POST['register'])) {
     }
 
     // 3. Lakukan Query ke db_penjualan pada tabel pengguna
-    $sql = "INSERT INTO pengguna (id_pengguna, nama_pengguna, email, password_pengguna, role_pengguna) VALUES ('$id_pengguna', '$nama_pengguna', '$email', '$password', '$role_pengguna')";
+    $sql = "INSERT INTO pengguna (id_pengguna, nama_pengguna, email_pengguna, password_pengguna, role_pengguna) VALUES ('$id_pengguna', '$nama_pengguna', '$email', '$password', '$role_pengguna')";
     $query = mysqli_query($conn_penjualan, $sql);
 
     // 4. Hitung apakah data ditemukan atau tidak

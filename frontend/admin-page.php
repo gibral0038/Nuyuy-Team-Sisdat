@@ -1,5 +1,6 @@
 <?php 
-    if (!isset($_SESSION['id_pengguna']) || $_SESSION['role_pengguna'] !== 'admin') {
+    session_start();
+    if (!isset($_SESSION['email_pengguna']) || $_SESSION['role_pengguna'] !== 'admin') {
         header("Location: login-page.php");
         exit();
     }
