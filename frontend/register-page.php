@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Form Login Pengguna</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<nav>
-    <ul>
-        <li><a href="login-page.php" style="color: red; font-weight: bold;">Login</a></li>
-    </ul>
-</nav>
-<body>
+
+<body class="halaman-register">
+    <nav>
+        <ul>
+            <li><a href="login-page.php" style="color: red; font-weight: bold;">Login</a></li>
+        </ul>
+    </nav>
+
     <h3>Form Register Pengguna</h3>
     <!-- Data dikirim ke file proses-register.php -->
     <form action="../backend/proses-register.php" method="POST">
@@ -28,18 +32,19 @@
             <label for="password">Password: </label>
             <input type="password" name="password" placeholder="Masukkan Password" required />
         </p>
-            <label>Pilih Role Akun:</label><br>
-            <input type="radio" id="role_customer" name="role_pengguna" value="customer" checked>
-            <label for="role_customer">Customer</label> <br>
+        <label>Pilih Role Akun:</label><br>
+        <input type="radio" id="role_customer" name="role_pengguna" value="customer" checked>
+        <label for="role_customer">Customer</label> <br>
 
-            <input type="radio" id="role_admin" name="role_pengguna" value="admin">
-            <label for="role_admin">Admin Gudang</label> <br>
+        <input type="radio" id="role_admin" name="role_pengguna" value="admin">
+        <label for="role_admin">Admin Gudang</label> <br>
 
-            <input type="radio" id="role_supplier" name="role_pengguna" value="supplier">
-            <label for="role_supplier">Supplier</label>
+        <input type="radio" id="role_supplier" name="role_pengguna" value="supplier">
+        <label for="role_supplier">Supplier</label>
         <p>
             <input type="submit" value="Register" name="register" />
         </p>
     </form>
 </body>
+
 </html>

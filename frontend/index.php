@@ -1,4 +1,4 @@
-<?php 
+<?php
 // 1. Mulai session wajib di setiap halaman yang diproteksi
 session_start();
 
@@ -21,7 +21,7 @@ if (isset($_SESSION['role_pengguna'])) {
     }
 }
 
-include("../backend/koneksi.php"); 
+include("../backend/koneksi.php");
 
 // Mengambil data ringkasan untuk dashboard (Opsional, agar halaman terlihat dinamis)
 // 1. Hitung total pesanan dari DB Penjualan
@@ -35,26 +35,20 @@ $best_seller = mysqli_fetch_array($query_best);
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Penjualan & Manajemen Stok</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-        header { margin-bottom: 20px; }
-        nav ul { list-style-type: none; padding: 0; }
-        nav ul li { display: inline; margin-right: 15px; }
-        nav ul li a { text-decoration: none; color: #007BFF; font-weight: bold; }
-        nav ul li a:hover { text-decoration: underline; }
-        .info-box { background-color: #f4f4f4; padding: 15px; border-radius: 5px; margin-top: 20px; border-left: 5px solid #28a745; }
-    </style>
+    <link rel="Stylesheet" href="style.css">
 </head>
-<nav>
-    <ul>
-        <li><a href="../backend/logout.php" style="color: red; font-weight: bold;">🚪 Keluar (Logout)</a></li>
-    </ul>
-</nav>
-<body>
+
+<body class="index-php">
+    <nav>
+        <ul>
+            <li><a href="../backend/logout.php" style="color: red; font-weight: bold;">🚪 Keluar (Logout)</a></li>
+        </ul>
+    </nav>
 
     <header>
         <h1>Sistem Integrasi Penjualan & Gudang</h1>
@@ -75,9 +69,9 @@ $best_seller = mysqli_fetch_array($query_best);
             <ul>
                 <li>Total Transaksi di Database Penjualan: <strong><?php echo $total_pesanan; ?> pesanan</strong></li>
                 <li>
-                    Produk Terlaris Bulan Ini (Database Gudang): 
+                    Produk Terlaris Bulan Ini (Database Gudang):
                     <strong>
-                        <?php 
+                        <?php
                         if ($best_seller) {
                             echo "ID Produk: " . $best_seller['id_produk'] . " (Terjual: " . $best_seller['jumlah_terjual'] . ")";
                         } else {
@@ -88,11 +82,13 @@ $best_seller = mysqli_fetch_array($query_best);
                 </li>
             </ul>
         </div>
-        
-        <p style="color: gray; font-size: 12px; margin-top: 30px;">
-            *Sistem ini menggunakan koneksi 2 database terpisah (db_penjualan & db_gudang) secara sinkron melalui localhost XAMPP.
+
+        <p class="sistem-note">
+            *Sistem ini menggunakan koneksi 2 database terpisah (db_penjualan & db_gudang) secara sinkron melalui
+            localhost XAMPP.
         </p>
     </main>
 
 </body>
+
 </html>

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Form Pemesanan Menu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+
+<body class="halaman-pemesanan">
     <h3>Form Pemesanan Menu</h3>
     <!-- Data dikirim ke file proses-pesan.php -->
     <form action="../backend/proses-pesan.php" method="POST">
@@ -24,4 +27,5 @@
         </p>
     </form>
 </body>
+
 </html>
