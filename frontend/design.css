@@ -1,0 +1,767 @@
+/*
+=================================
+INTERFACE STYLE UNTUK INDEX PHP
+=================================
+*/
+.index-php {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    line-height: 1.6;
+    background-color: #ffffff;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.info-box {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    border-left: 5px solid #28a745;
+}
+
+.sistem-note {
+    color: gray;
+    font-size: 12px;
+    margin-top: 30px;
+}
+
+/*
+=======================================
+INTERFACE STYLE UNTUK LOGIN & Register
+======================================
+*/
+.halaman-login, .halaman-register {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    background-color: #f3eae1; /* Warna krem background utama */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+/* Sizing & Posisi Logo Abu-abu di Pojok Kiri Atas */
+.logo-container {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
+.logo-box {
+    background-color: #a8a8a8;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: black;
+}
+
+/* Base Card Form (Gradasi Krem ke Putih melengkung) */
+.auth-card {
+    background: linear-gradient(to bottom, #f3d4b7, #ffffff);
+    width: 480px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-bottom: 4px solid rgba(0,0,0,0.05);
+}
+
+/* Desain Navigasi Tab Atas (Log In / Register) */
+.auth-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #b6b6b6;
+    margin-bottom: 25px;
+}
+.tab-item {
+    text-decoration: none;
+    color: #8c8c8c;
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    width: 50%;
+    text-align: center;
+    position: relative;
+}
+.tab-item.active {
+    color: #000000;
+}
+.tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #e05300; /* Garis oranye penanda aktif */
+}
+
+/* Aturan Tampilan Form & Kolom Input */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.input-group label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000;
+}
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input-wrapper .icon {
+    position: absolute;
+    left: 12px;
+    color: #a0a0a0;
+}
+.input-wrapper input, .input-wrapper select {
+    width: 100%;
+    padding: 12px 12px 12px 35px; /* Spasi kiri dikasih lebih buat tempat ikon emoji */
+    border: 1px solid #e2e8f0;
+    border-radius: 25px; /* Membuat input lonjong bulat */
+    background-color: #ffffff;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Tombol Submit Utama (Oranye Efek 3D) */
+.btn-auth {
+    width: 100%;
+    background-color: #e05300;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 0px #b04100; /* Efek ketebalan 3D di bawah tombol */
+    transition: background 0.2s;
+}
+.btn-auth:hover {
+    background-color: #c44900;
+}
+
+/*
+====================================
+INTERFACE STYLE UNTUK REGISTER-PAGE
+====================================
+/* Form row untuk membagi kolom Password & Role biar berdampingan */
+.halaman-register .form-row {
+    display: flex;
+    gap: 15px;
+}
+.halaman-register .form-row .input-group {
+    flex: 1; /* Membagi ukuran rata 50:50 ke samping */
+}
+
+/* Styling Dropdown Select Role khusus halaman register */
+.halaman-register .input-wrapper select {
+    padding-left: 15px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+}
+
+/*
+=================================
+INTERFACE STYLE UNTUK FORM-PESAN
+=================================
+*/
+/* Mengubah layout halaman agar memanjang ke bawah bukan nengah di layar */
+.halaman-pemesanan {
+    display: block;
+    height: auto;
+    background-color: #f6efe9;
+    padding-bottom: 50px;
+}
+
+/* --- NAVBAR STYLING --- */
+.navbar-customer {
+    background-color: #eecda8; /* Warna krem agak gelap untuk bar atas */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    border-radius: 0 0 25px 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.logo-box-nav {
+    background-color: #8c8c8c;
+    color: black;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 5px;
+}
+.search-container {
+    position: relative;
+    width: 40%;
+}
+.search-container input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    border-radius: 20px;
+    border: none;
+    background-color: #ffffff;
+    outline: none;
+}
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8c8c8c;
+}
+.profile-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.cart-icon {
+    font-size: 22px;
+    cursor: pointer;
+}
+.user-profile {
+    background-color: #dfba92;
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+
+/* --- MAIN LAYOUT STYLING --- */
+.dashboard-content {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+.top-row {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+.card-section {
+    background: linear-gradient(to bottom, #f0d5bb, #e6caa3);
+    border-radius: 25px;
+    padding: 20px 35px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.03);
+}
+.riwayat-section {
+    flex: 3; /* Lebar riwayat pembelian lebih besar */
+}
+.pesan-lagi-section {
+    flex: 2; /* Lebar kotak pesan lagi */
+}
+.card-section h3, .katalog-menu-section h3 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 15px;
+}
+
+/* Riwayat List Split Column */
+.riwayat-grid {
+    display: flex;
+}
+.riwayat-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.riwayat-col.border-left {
+    border-left: 2px solid rgba(0,0,0,0.1);
+    padding-left: 20px;
+}
+.riwayat-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+/* --- MENU CARD GRID SYSTEM --- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* Mengatur otomatis jumlah kolom kesamping */
+    gap: 25px;
+    margin-top: 20px;
+}
+.menu-card {
+    background: linear-gradient(to bottom, #f4d9bf, #ffffff);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+.menu-card:hover {
+    transform: translateY(-50%);
+}
+.menu-card-horizontal {
+    background: linear-gradient(to bottom, #f4d9bf, #ffffff);
+    border-radius: 20px;
+    display: flex;
+    padding: 15px;
+    gap: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Placeholder Kotak Gambar */
+.img-placeholder {
+    background-color: #abc956; /* Warna hijau rumput di mockup */
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    border-radius: 15px;
+    margin: 15px 15px 0 15px;
+}
+.menu-card-horizontal .img-placeholder {
+    width: 100px;
+    height: 80px;
+    margin: 0;
+}
+
+.menu-detail {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.menu-card-horizontal .menu-detail {
+    padding: 0;
+    justify-content: center;
+}
+.menu-detail h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #000;
+}
+.sold-count {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 10px;
+}
+.menu-price {
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+}
+
+/* Input pembelian di dalam card */
+.action-buy {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.input-qty {
+    width: 60px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+.btn-buy {
+    flex: 1;
+    background-color: #e05300;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #b04100;
+}
+.btn-buy:hover {
+    background-color: #c44900;
+}
+
+/*
+====================================
+INTERFACE STYLE UNTUK SUPPLIER-PAGE
+====================================
+*/
+.halaman-supplier {
+    display: block;
+    height: auto;
+    background-color: #ede2d7; /* Warna krem pucat latar belakang utama mockup */
+    padding: 20px;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* --- NAVBAR KAPSUL LONJONG (SAMA PERSIS DENGAN MOCKUP) --- */
+.navbar-supplier {
+    background-color: #f2d2b6; /* Warna krem orange pastel navbar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    border-radius: 40px; /* Membuat sudut membulat lonjong seperti kapsul */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+    max-width: 1300px;
+    margin: 0 auto 30px auto;
+}
+.logo-box-nav {
+    background-color: #9c9c9c;
+    color: black;
+    font-weight: bold;
+    padding: 12px 35px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+.navbar-right-side {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.truck-icon {
+    font-size: 24px;
+    opacity: 0.6;
+}
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+.user-avatar {
+    font-size: 22px;
+}
+
+/* --- 3 KOLOM SEJAJAR GRID SYSTEM --- */
+.supplier-dashboard-content {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 1.1fr 0.8fr; /* Pembagian proporsi kolom mockup */
+    gap: 25px;
+    align-items: start;
+}
+
+.supplier-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-column-gap {
+    gap: 25px; /* Spasi vertikal antara box Target dan Laporan di kolom ke-3 */
+}
+
+/* Judul Kolom */
+.supplier-column h2 {
+    font-size: 28px;
+    color: #000000;
+    margin: 0 0 15px 5px;
+    font-weight: bold;
+}
+
+/* Base Card Konten Kelompok (Krem Pekat + Soft Shadow Lembut) */
+.card-list-box, .sub-target-box, .sub-laporan-box {
+    background-color: #ebd3bc; /* Warna krem kecokelatan wadah card mockup */
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.sub-target-box h2, .sub-laporan-box h2 {
+    font-size: 24px;
+    margin: 0 0 5px 0;
+}
+
+/* Baris Item List Putih */
+.item-list-row {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 10px 15px;
+    display: flex;
+    gap: 15px;
+    border-bottom: 2px solid rgba(0,0,0,0.03);
+}
+.align-center {
+    align-items: center;
+}
+.small-padding {
+    padding: 6px 15px;
+}
+
+/* Mini Gambar Hijau Rumput */
+.img-mini-placeholder {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(to bottom, #98c6ef, #abc956); /* Gradasi langit dan rumput hijau */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+.icon-small {
+    width: 40px;
+    height: 40px;
+}
+
+/* Penataan Detail Grid Teks di Dalam Baris */
+.item-row-detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+}
+.row-title-flex {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+}
+.pesan-row-detail {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+}
+.buyer-item {
+    font-weight: bold;
+}
+
+/* --- THEME CUSTOM PROGRESS BAR TEBAL (ORANYE MOCKUP) --- */
+progress {
+    width: 100%;
+    height: 18px; /* Tebal sesuai mockup gambar */
+    border-radius: 15px;
+    appearance: none;
+    border: none;
+}
+progress::-webkit-progress-bar {
+    background-color: #ffffff;
+    border-radius: 15px;
+}
+progress::-webkit-progress-value {
+    background-color: #e05300; /* Warna Oranye utama */
+    border-radius: 15px;
+}
+progress::-moz-progress-bar {
+    background-color: #e05300;
+    border-radius: 15px;
+}
+.progress-target {
+    height: 22px; /* Lebih tebal untuk kolom target profit */
+}
+
+/* --- TABEL LAYOUT UTK HEADER BOX --- */
+.table-header-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    padding: 0 15px 5px 65px; /* Offset pas melompati lebar gambar mini */
+}
+.border-bottom {
+    border-bottom: 2px solid rgba(0,0,0,0.08);
+    padding: 0 15px 8px 60px;
+}
+
+.status-tag, .report-total {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    width: 60px;
+    text-align: right;
+}
+.report-menu-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+}
+
+/* Info Text Target Box */
+.target-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 2px;
+}
+
+/*
+=================================
+INTERFACE STYLE UNTUK ADMIN-PAGE
+=================================
+*/
+.halaman-admin {
+    display: block;
+    height: auto;
+    background-color: #ede2d7; /* Warna krem background khas mockup kelompok */
+    padding: 20px;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* --- NAVBAR KAPSUL ADMIN --- */
+.navbar-admin {
+    background-color: #f2d2b6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    border-radius: 40px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+    max-width: 1300px;
+    margin: 0 auto 30px auto;
+}
+.admin-icon {
+    font-size: 24px;
+    opacity: 0.7;
+}
+
+/* --- TWO COLUMN DASHBOARD LAYOUT --- */
+.admin-dashboard-content {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 0.8fr 2.2fr; /* Kolom kiri lebih ringkas, tabel kanan luas */
+    gap: 30px;
+    align-items: start;
+}
+
+.admin-left-column, .admin-right-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-left-column h2, .admin-right-column h2 {
+    font-size: 28px;
+    color: #000000;
+    margin: 0 0 15px 5px;
+    font-weight: bold;
+}
+
+/* --- BOX PEMBUNGKUS TABEL MODERN (KREM PEKAT) --- */
+.table-container-box {
+    background-color: #ebd3bc;
+    border-radius: 25px;
+    padding: 25px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* --- MODERENISASI TABEL HTML --- */
+.modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* Memberikan efek spasi renggang antar baris */
+    margin-top: -8px;
+}
+
+.modern-table th {
+    background-color: transparent;
+    color: #000000;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 15px;
+    text-align: left;
+    border: none;
+}
+
+.modern-table tbody tr {
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.modern-table td {
+    padding: 12px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    border: none;
+}
+
+/* Membuat lengkungan kapsul pada ujung kiri dan kanan tiap baris tabel */
+.modern-table tbody tr td:first-child {
+    border-radius: 12px 0 0 12px;
+}
+.modern-table tbody tr td:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+/* --- TOMBOL AKSI ADMIN (SUNTING & HAPUS) --- */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+.btn-edit, .btn-delete {
+    background-color: #ede2d7;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+.btn-edit:hover {
+    background-color: #dfba92;
+}
+.btn-delete:hover {
+    background-color: #ffcccc;
+}
+
+/* Summary Footer */
+.table-footer-summary {
+    margin-top: 15px;
+    padding-left: 5px;
+    font-size: 14px;
+    color: #000000;
+}
+.table-footer-summary p {
+    margin: 0;
+}

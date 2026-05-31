@@ -1,32 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Login Pengguna</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="design.css">
 </head>
 
 <body class="halaman-login">
-    <h3>Form Login Pengguna</h3>
-    <!-- Data dikirim ke file proses-login.php -->
-    <form action="../backend/proses-login.php" method="POST">
-        <p>
-            <label for="email_pengguna">Email: </label>
-            <input type="email" name="email_pengguna" placeholder="Masukkan Email" required />
-        </p>
-        <p>
-            <label for="password">Password: </label>
-            <input type="password" name="password" placeholder="Masukkan Password" required />
-        </p>
-        <input type="submit" value="Login" name="login" />
-        </p>
-        <p>
-            <a href="register-page.php"
-                style="border-radius: 0; padding: 5px 10px; background-color: #ededed; color: black; border: 1px solid #3f3f3f; text-decoration: none;">
-                Register
-            </a>
-        </p>
-    </form>
+
+    <div class="logo-container">
+        <div class="logo-box">Logo</div>
+    </div>
+
+    <div class="auth-card">
+        <div class="auth-tabs">
+            <a href="login-page.php" class="tab-item active">Log In</a>
+            <a href="register-page.php" class="tab-item">Register</a>
+        </div>
+
+        <form action="../backend/proses-login.php" method="POST" class="auth-form">
+            <div class="input-group">
+                <label for="email_pengguna">Email / Username</label>
+                <div class="input-wrapper">
+                    <span class="icon">✉️</span>
+                    <input type="email" name="email_pengguna" placeholder="Email / Username" required />
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="icon">🔒</span>
+                    <input type="password" name="password" placeholder="Password" required />
+                </div>
+            </div>
+
+            <button type="submit" name="login" class="btn-auth">Log In</button>
+        </form>
+    </div>
+
 </body>
 
 </html>

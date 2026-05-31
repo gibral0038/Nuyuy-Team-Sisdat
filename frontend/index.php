@@ -40,7 +40,7 @@ $best_seller = mysqli_fetch_array($query_best);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Penjualan & Manajemen Stok</title>
-    <link rel="Stylesheet" href="style.css">
+    <link rel="Stylesheet" href="design.css">
 </head>
 
 <body class="index-php">
