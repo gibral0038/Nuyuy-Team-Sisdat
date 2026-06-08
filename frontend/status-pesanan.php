@@ -35,7 +35,9 @@ $query = mysqli_query($conn_penjualan, $sql);
 <div class="page-container">
 
 <header class="navbar-customer">
-    <div class="logo-box-nav">logo</div>
+    <div class="logo-box-nav">
+        <img src="../asset/Logo-web.png" alt="Gambar Saya">
+    </div>
     <div class="profile-container">
         <div class="user-profile">
             <span class="user-avatar">👤</span>

@@ -64,7 +64,9 @@ while ($p = mysqli_fetch_array($qArr)) {
 <div class="page-container">
 
 <header class="navbar-supplier">
-    <div class="logo-box-nav">logo</div>
+    <div class="logo-box-nav">
+        <img src="../asset/Logo-web.png" alt="Gambar Saya">
+    </div>
     <div class="navbar-right-side">
         <span class="truck-icon">🚚</span>
         <div class="user-profile">
