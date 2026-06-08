@@ -290,6 +290,11 @@ INTERFACE STYLE UNTUK FORM-PESAN
     position: relative;
     width: 40%;
 }
+.crud-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .search-container input {
     width: 100%;
     padding: 10px 15px 10px 40px;
