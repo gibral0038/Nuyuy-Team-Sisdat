@@ -12,7 +12,19 @@ $id_customer = $_SESSION['id_pengguna'];
 // 1. Ambil data Riwayat Pesanan Customer (maks 6 terbaru)
 $queryRiwayat = mysqli_query(
     $conn_penjualan,
-    "SELECT id_pesanan, tanggal_pesanan, status_pesanan FROM pesanan WHERE id_pengguna = '$id_customer' ORDER BY tanggal_pesanan DESC LIMIT 6"
+    "SELECT
+        ps.id_pesanan,
+        ps.status_pesanan,
+        ps.tanggal_pesanan,
+        p.nama_produk
+     FROM pesanan ps
+     JOIN detail_pesanan dp
+        ON ps.id_pesanan = dp.id_pesanan
+     JOIN db_gudang.produk p
+        ON dp.id_produk = p.id_produk
+     WHERE ps.id_pengguna = '$id_customer'
+     ORDER BY ps.id_pesanan DESC
+     LIMIT 6"
 );
 $riwayat_data = [];
 while ($row = mysqli_fetch_array($queryRiwayat)) {
@@ -39,7 +51,7 @@ $queryPesanLagi = mysqli_query(
      JOIN pesanan ps ON d.id_pesanan = ps.id_pesanan 
      JOIN (SELECT id_produk, nama_produk, harga_produk FROM db_gudang.produk) g ON d.id_produk = g.id_produk 
      WHERE ps.id_pengguna = '$id_customer' 
-     ORDER BY ps.tanggal_pesanan DESC LIMIT 1"
+     ORDER BY ps.id_pesanan DESC LIMIT 1"
 );
 $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
 ?>
@@ -102,7 +114,8 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
                             $status = $riwayat_data[$i]['status_pesanan'];
                         ?>
                             <div class="riwayat-item">
-                                <span><?php echo $riwayat_data[$i]['id_pesanan']; ?></span>
+                                <strong>Pesanan #<?php echo $riwayat_data[$i]['id_pesanan']; ?></strong>
+                                <strong><?php echo $riwayat_data[$i]['nama_produk']; ?></strong>
                                 <strong><?php echo $status; ?></strong>
                             </div>
                         <?php } ?>
@@ -114,7 +127,8 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
                             $status = $riwayat_data[$i]['status_pesanan'];
                         ?>
                             <div class="riwayat-item">
-                                <span><?php echo $riwayat_data[$i]['id_pesanan']; ?></span> 
+                                <strong>Pesanan #<?php echo $riwayat_data[$i]['id_pesanan']; ?></strong>
+                                <strong><?php echo $riwayat_data[$i]['nama_produk']; ?></strong>
                                 <strong><?php echo $status; ?></strong>
                             </div>
                         <?php } ?>

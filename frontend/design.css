@@ -333,8 +333,12 @@ INTERFACE STYLE UNTUK FORM-PESAN
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     transition: transform 0.2s;
 }
+.menu-card {
+    transition: box-shadow 0.2s ease;
+}
 .menu-card:hover {
-    transform: translateY(-50%);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 .menu-card-horizontal {
     background: linear-gradient(to bottom, #f4d9bf, #ffffff);
