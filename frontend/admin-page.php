@@ -103,7 +103,7 @@ $total_data = mysqli_num_rows($queryProduk);
                         if ($total_data > 0) {
                             while ($produk = mysqli_fetch_array($queryProduk)) {
                                 echo "<tr>";
-                                echo "<td>" . $produk['nama_supplier'] . "</td>";
+                                echo "<td>" . $produk['id_supplier'] . "</td>";
                                 echo "<td>" . $produk['id_produk'] . "</td>";
                                 echo "<td>" . $produk['nama_produk'] . "</td>";
                                 echo "<td>Rp " . number_format($produk['harga_produk'], 0, ',', '.') . "</td>";
@@ -120,7 +120,7 @@ $total_data = mysqli_num_rows($queryProduk);
                             // Dummy data tabel biar persis seperti sketsa gambar mockup kamu
                             for ($i=1; $i<=3; $i++) {
                                 echo "<tr>";
-                                echo "<td>nama supplier</td>";
+                                echo "<td>id supplier</td>";
                                 echo "<td>id produk</td>";
                                 echo "<td>nama produk</td>";
                                 echo "<td>harga</td>";
