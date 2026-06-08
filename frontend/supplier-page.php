@@ -31,6 +31,25 @@ $queryBest = mysqli_query(
      ORDER BY jumlah_terjual DESC
      LIMIT 4"
 );
+
+$arr = [];
+$qArr = mysqli_query(
+    $conn_gudang,
+    "SELECT pd.id_produk, pd.nama_produk, pd.deskripsi_produk, pd.harga_produk,
+            COALESCE(g.stok_sekarang,0) AS stok_sekarang
+     FROM produk pd
+     LEFT JOIN gudang g ON g.id_produk = pd.id_produk
+     WHERE pd.id_supplier = '$id_supplier_aktif'"
+);
+while ($p = mysqli_fetch_array($qArr)) {
+    $arr[] = [
+        'id_produk'        => (int)$p['id_produk'],
+        'nama_produk'      => $p['nama_produk'],
+        'deskripsi_produk' => $p['deskripsi_produk'],
+        'harga_produk'     => (int)$p['harga_produk'],
+        'stok_sekarang'    => (int)$p['stok_sekarang'],
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -144,6 +163,7 @@ $queryBest = mysqli_query(
         <div class="card-list-box" style="margin-top:25px;">
             <div id="bbSupplierTambahStokContainer" style="display:none;">
                 <h3 style="margin:0 0 10px 0; font-size:18px;">Tambah Stok</h3>
+                <p id="stok_nama_produk_label" style="font-weight:bold; font-size:14px; margin:0 0 8px 0;"></p>
                 <form action="../backend/proses-tambah-stok-popup.php" method="POST" class="crud-form">
                     <input type="hidden" name="tambah_stok_popup" value="1" />
                     <input type="hidden" id="stok_id_produk" name="id_produk" value="" />
@@ -218,14 +238,14 @@ $queryBest = mysqli_query(
         );
         if (!item) { alert('Produk tidak ditemukan: ' + id); return; }
 
-        // Isi hidden input
+        // Isi hidden input id produk
         document.getElementById('stok_id_produk').value = item.id_produk;
 
-        // Tampilkan label nama produk (opsional)
+        // Tampilkan nama produk di label
         const label = document.getElementById('stok_nama_produk_label');
         if (label) label.textContent = item.nama_produk;
 
-        // Tampilkan container
+        // Tampilkan container tambah stok
         const container = document.getElementById('bbSupplierTambahStokContainer');
         if (!container) { alert('Container tidak ditemukan!'); return; }
 
@@ -233,29 +253,5 @@ $queryBest = mysqli_query(
         container.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 </script>
-
-<script>
-    window.bbSupplierProducts = <?php
-        $arr = [];
-        $q = mysqli_query(
-            $conn_gudang,
-            "SELECT pd.id_produk, pd.nama_produk, pd.deskripsi_produk, pd.harga_produk,
-                    COALESCE(g.stok_sekarang,0) AS stok_sekarang
-             FROM produk pd
-             WHERE pd.id_supplier = '$id_supplier_aktif'"
-        );
-        while ($p = mysqli_fetch_array($q)) {
-            $arr[] = [
-                'id_produk' => (int)$p['id_produk'],
-                'nama_produk' => $p['nama_produk'],
-                'deskripsi_produk' => $p['deskripsi_produk'],
-                'harga_produk' => (int)$p['harga_produk'],
-                'stok_sekarang' => (int)$p['stok_sekarang'],
-            ];
-        }
-        echo json_encode($arr);
-    ?>;
-</script>
 </body>
 </html>
-
