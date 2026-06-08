@@ -83,7 +83,7 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
             <span class="cart-icon">🛒</span>
             <div class="user-profile">
                 <span class="user-avatar">👤</span>
-                <span class="user-name"><?php echo $_SESSION['nama_pengguna']; ?></span>
+                <span class="user-name"><?php echo $_SESSION['id_pengguna']; ?></span>
                 <a class="btn-logout-inline" href="../backend/logout.php" title="Logout">🚪</a>
             </div>
         </div>

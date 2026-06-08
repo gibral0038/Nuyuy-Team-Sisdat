@@ -58,7 +58,7 @@ $query = mysqli_query($conn_penjualan, $sql);
         <div class="profile-container">
             <div class="user-profile">
                 <span class="user-avatar">👤</span>
-                <span class="user-name"><?php echo htmlspecialchars($_SESSION['nama_pengguna'] ?? 'Customer'); ?></span>
+                <span class="user-name"><?php echo htmlspecialchars($_SESSION['id_pengguna'] ?? 'Customer'); ?></span>
                 <a class="btn-logout-inline" href="../backend/logout.php" title="Logout">🚪</a>
             </div>
         </div>

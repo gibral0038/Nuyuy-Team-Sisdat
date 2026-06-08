@@ -69,7 +69,7 @@ while ($p = mysqli_fetch_array($qArr)) {
         <span class="truck-icon">🚚</span>
         <div class="user-profile">
             <span class="user-avatar">👤</span>
-            <span class="user-name"><?php echo htmlspecialchars($_SESSION['nama_pengguna'] ?? 'Username'); ?></span>
+            <span class="user-name"><?php echo htmlspecialchars($_SESSION['id_pengguna'] ?? 'Username'); ?></span>
             <a class="btn-logout-inline" href="../backend/logout.php" title="Logout">🚪</a>
         </div>
     </div>
