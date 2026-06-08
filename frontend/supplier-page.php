@@ -11,7 +11,6 @@ include("../backend/koneksi.php");
 $pesan = $_GET['pesan'] ?? '';
 $err = $_GET['err'] ?? '';
 
-// ambil produk milik supplier aktif + stok master
 $queryProduk = mysqli_query(
     $conn_gudang,
     "SELECT pd.id_produk, pd.nama_produk, pd.deskripsi_produk, pd.harga_produk,
@@ -23,7 +22,6 @@ $queryProduk = mysqli_query(
      ORDER BY pd.id_produk DESC"
 );
 
-// ambil top selling untuk supplier ini (berdasarkan best_seller)
 $queryBest = mysqli_query(
     $conn_gudang,
     "SELECT pd.id_produk, pd.nama_produk, COALESCE(bs.jumlah_terjual,0) AS jumlah_terjual
@@ -33,7 +31,6 @@ $queryBest = mysqli_query(
      ORDER BY jumlah_terjual DESC
      LIMIT 4"
 );
-
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -70,13 +67,11 @@ $queryBest = mysqli_query(
                         elseif ($pesan === 'tambah_produk_gagal') echo 'Gagal menambahkan produk.';
                         elseif ($pesan === 'tambah_stok_sukses') echo 'Stok berhasil ditambahkan.';
                         elseif ($pesan === 'tambah_stok_gagal') echo 'Gagal menambah stok.';
-                        elseif ($pesan === 'edit_sukses') echo 'Produk berhasil diupdate.';
-                        elseif ($pesan === 'edit_gagal') echo 'Gagal mengupdate produk.';
-                        elseif ($pesan === 'hapus_sukses') echo 'Produk berhasil dihapus.';
-                        elseif ($pesan === 'hapus_gagal') echo 'Gagal menghapus produk.';
                         else echo htmlspecialchars($pesan);
                     ?>
-                    <?php if ($err): ?><div style="margin-top:6px; color:#b00020; font-size:12px;">Error: <?php echo htmlspecialchars($err); ?></div><?php endif; ?>
+                    <?php if ($err): ?>
+                        <div style="margin-top:6px; color:#b00020; font-size:12px;">Error: <?php echo htmlspecialchars($err); ?></div>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
@@ -87,36 +82,37 @@ $queryBest = mysqli_query(
             </div>
 
             <div style="display:flex; flex-direction:column; gap:12px;">
-            <?php
+                <?php
                 $hasData = false;
                 while ($row = mysqli_fetch_array($queryProduk)) {
                     $hasData = true;
                     $stok = (int)($row['stok_sekarang'] ?? 0);
-            ?>
-                <div class="item-list-row align-center" style="gap:12px;">
-                    <div class="img-mini-placeholder">📦</div>
-                    <div class="item-row-detail" style="gap:2px;">
-                        <div class="row-title-flex">
-                            <span class="item-name"><?php echo htmlspecialchars($row['nama_produk']); ?></span>
-                            <span class="item-qty">ID <?php echo (int)$row['id_produk']; ?></span>
+                    $idProduk = (int)$row['id_produk'];
+                ?>
+                    <div class="item-list-row align-center" style="gap:12px;">
+                        <div class="img-mini-placeholder">📦</div>
+                        <div class="item-row-detail" style="gap:2px;">
+                            <div class="row-title-flex">
+                                <span class="item-name"><?php echo htmlspecialchars($row['nama_produk']); ?></span>
+                                <span class="item-qty">ID <?php echo $idProduk; ?></span>
+                            </div>
+                            <div style="font-size:13px; color:#333; font-weight:bold;">Stok Saat Ini: <?php echo $stok; ?></div>
                         </div>
-                        <div style="font-size:13px; color:#333; font-weight:bold;">Stok Saat Ini: <?php echo $stok; ?></div>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <button class="btn-edit" type="button" data-edit="<?php echo $idProduk; ?>" onclick="window.bbSupplierTambahStok(this)">⚙️</button>
+                            <form action="../backend/proses-hapus-produk.php" method="POST" onsubmit="return confirm('Hapus produk ini?');">
+                                <input type="hidden" name="id_produk" value="<?php echo $idProduk; ?>" />
+                                <button class="btn-delete" type="submit" name="hapus_produk">🗑️</button>
+                            </form>
+                        </div>
                     </div>
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <button class="btn-edit" type="button" data-edit="<?php echo (int)$row['id_produk']; ?>" onclick="window.bbSupplierEdit(this)">⚙️</button>
-                        <form action="../backend/proses-hapus-produk.php" method="POST" onsubmit="return confirm('Hapus produk ini?');">
-                            <input type="hidden" name="id_produk" value="<?php echo (int)$row['id_produk']; ?>" />
-                            <button class="btn-delete" type="submit" name="hapus_produk">🗑️</button>
-                        </form>
-                    </div>
-                </div>
-            <?php } ?>
+                <?php } ?>
 
-            <?php if (!$hasData): ?>
-                <div class="item-list-row" style="justify-content:center;">
-                    <span style="color:#666; font-weight:bold;">Belum ada produk.</span>
-                </div>
-            <?php endif; ?>
+                <?php if (!$hasData): ?>
+                    <div class="item-list-row" style="justify-content:center;">
+                        <span style="color:#666; font-weight:bold;">Belum ada produk.</span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -146,41 +142,19 @@ $queryBest = mysqli_query(
         </div>
 
         <div class="card-list-box" style="margin-top:25px;">
-            <h3 style="margin:0 0 10px 0; font-size:18px;">Edit Produk (replace stok)</h3>
-            <form action="../backend/proses-edit-produk.php" method="POST" class="crud-form">
-                <input type="hidden" name="update_produk" value="1" />
-                <input type="hidden" id="edit_id_produk" name="id_produk" value="" />
+            <div id="bbSupplierTambahStokContainer" style="display:none;">
+                <h3 style="margin:0 0 10px 0; font-size:18px;">Tambah Stok</h3>
+                <form action="../backend/proses-tambah-stok-popup.php" method="POST" class="crud-form">
+                    <input type="hidden" name="tambah_stok_popup" value="1" />
+                    <input type="hidden" id="stok_id_produk" name="id_produk" value="" />
 
-                <label style="font-weight:bold; font-size:13px;">Nama Produk</label>
-                <input id="edit_nama_produk" name="nama_produk" required class="crud-input" />
+                    <label style="font-weight:bold; font-size:13px;">Jumlah Tambah</label>
+                    <input type="number" name="jumlah_tambah" min="1" required class="crud-input" />
 
-                <label style="font-weight:bold; font-size:13px;">Deskripsi</label>
-                <input id="edit_deskripsi_produk" name="deskripsi_produk" required class="crud-input" />
+                    <button type="submit" class="btn-auth" style="margin-top:12px;">Tambah Stok</button>
+                </form>
 
-                <label style="font-weight:bold; font-size:13px;">Harga</label>
-                <input type="number" id="edit_harga_produk" name="harga_produk" min="0" required class="crud-input" />
-
-                <label style="font-weight:bold; font-size:13px;">Stok Baru (replace)</label>
-                <input type="number" id="edit_stok_produk_baru" name="stok_produk_baru" min="0" required class="crud-input" />
-
-                <button id="btnSaveEdit" type="submit" class="btn-buy" style="margin-top:12px;">Simpan Edit</button>
-            </form>
-
-            <div style="height:14px;"></div>
-
-            <h3 style="margin:0 0 10px 0; font-size:18px;">Tambah Stok</h3>
-            <form action="../backend/proses-tambah-stok.php" method="POST" class="crud-form">
-                <input type="hidden" name="tambah_stok" value="1" />
-                <input type="hidden" id="stok_id_produk" name="id_produk" value="" />
-
-                <label style="font-weight:bold; font-size:13px;">Jumlah Tambah</label>
-                <input type="number" name="jumlah_tambah" min="1" required class="crud-input" />
-
-                <button type="submit" class="btn-auth" style="margin-top:12px;">Tambah Stok</button>
-            </form>
-
-            <div style="font-size:12px; color:#666; margin-top:10px;">
-                Tips: klik tombol ⚙️ di daftar produk untuk mengisi form edit/tambah stok.
+                <div style="font-size:12px; color:#666; margin-top:10px;">Masukkan jumlah stok lalu simpan.</div>
             </div>
         </div>
     </section>
@@ -208,8 +182,6 @@ $queryBest = mysqli_query(
                 <span>Penjualan</span>
             </div>
             <?php
-                // laporan sederhana: ambil top 4 dari supplier berdasarkan best_seller
-                // (laporan detail bisa ditingkatkan belakangan)
                 $qLap = mysqli_query(
                     $conn_gudang,
                     "SELECT pd.nama_produk, COALESCE(bs.jumlah_terjual,0) AS jumlah_terjual
@@ -236,10 +208,8 @@ $queryBest = mysqli_query(
 
 <script src="../backend/script.js"></script>
 <script>
-    // Supplier page needs edit metadata
     window.bbSupplierProducts = <?php
         $arr = [];
-        // reuse query by re-running
         $q = mysqli_query(
             $conn_gudang,
             "SELECT pd.id_produk, pd.nama_produk, pd.deskripsi_produk, pd.harga_produk,

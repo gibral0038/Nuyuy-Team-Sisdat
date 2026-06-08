@@ -58,7 +58,7 @@ $best_seller = mysqli_fetch_array($query_best);
     <!-- Navigasi Menu ala Petanikode -->
     <nav>
         <ul>
-            <li><a href="form-pesan.php">🛒 Buat Pesanan Baru</a></li>
+<li><a href="form-pesan.php">🛒 Buat Pesanan Baru</a></li>
             <li><a href="../backend/status-pesanan.php">📋 Lihat Riwayat & Status Pesanan</a></li>
         </ul>
     </nav>
