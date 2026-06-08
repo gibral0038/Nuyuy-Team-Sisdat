@@ -32,6 +32,8 @@ $query = mysqli_query($conn_penjualan, $sql);
 </head>
 <body class="halaman-pemesanan">
 
+<div class="page-container">
+
 <header class="navbar-customer">
     <div class="logo-box-nav">logo</div>
     <div class="profile-container">
@@ -79,6 +81,8 @@ $query = mysqli_query($conn_penjualan, $sql);
         </div>
     </section>
 </main>
+
+</div> <!-- .page-container -->
 
 </body>
 </html>

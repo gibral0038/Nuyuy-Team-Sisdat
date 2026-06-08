@@ -13,28 +13,21 @@ $id_customer = (int)$_SESSION['id_pengguna'];
 <head>
     <meta charset="UTF-8">
     <title>Debug Pesanan</title>
-    <style>
-        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
-        .section { background: white; padding: 15px; margin: 10px 0; border-radius: 4px; }
-        .error { color: red; font-weight: bold; }
-        .success { color: green; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background: #f0f0f0; }
-    </style>
+    <link rel="stylesheet" href="design.css">
 </head>
 <body>
 
-<h1>🔍 DEBUG SISTEM PESANAN</h1>
+<div class="page-container">
+    <h1>🔍 DEBUG SISTEM PESANAN</h1>
 
-<div class="section">
-    <h3>📊 Data Customer</h3>
-    <p>ID: <?php echo $id_customer; ?></p>
-    <p>Nama: <?php echo htmlspecialchars($_SESSION['nama_pengguna']); ?></p>
-</div>
+    <div class="card-section">
+        <h3>📊 Data Customer</h3>
+        <p>ID: <?php echo $id_customer; ?></p>
+        <p>Nama: <?php echo htmlspecialchars($_SESSION['nama_pengguna']); ?></p>
+    </div>
 
-<div class="section">
-    <h3>📦 Data Produk di Gudang</h3>
+    <div class="card-section">
+        <h3>📦 Data Produk di Gudang</h3>
     <table>
         <tr>
             <th>ID Produk</th>
@@ -66,9 +59,9 @@ $id_customer = (int)$_SESSION['id_pengguna'];
         }
         ?>
     </table>
-</div>
+    </div>
 
-<div class="section">
+    <div class="card-section">
     <h3>🛒 Riwayat Pesanan Customer</h3>
     <table>
         <tr>
@@ -103,9 +96,9 @@ $id_customer = (int)$_SESSION['id_pengguna'];
         }
         ?>
     </table>
-</div>
+    </div>
 
-<div class="section">
+<div class="card-section">
     <h3>✅ Hasil Cek Error Database</h3>
     <?php
     $errors = [];
@@ -153,6 +146,8 @@ $id_customer = (int)$_SESSION['id_pengguna'];
 <p style="margin-top: 20px;">
     <a href="form-pesan.php" style="padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">← Kembali ke Form Pesan</a>
 </p>
+
+</div> <!-- .page-container -->
 
 </body>
 </html>

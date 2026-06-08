@@ -57,6 +57,8 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
 
 <body class="halaman-pemesanan">
 
+    <div class="page-container">
+
     <header class="navbar-customer">
         <div class="logo-box-nav">logo</div>
         
@@ -91,6 +93,8 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
                 ?>
             </div>
         <?php endif; ?>
+                    </div> <!-- .page-container -->
+
         
         <div class="top-row">
             <section class="card-section riwayat-section">

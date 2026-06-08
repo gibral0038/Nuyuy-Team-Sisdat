@@ -49,45 +49,48 @@ $best_seller = mysqli_fetch_array($query_best);
             <li><a class="btn-logout" href="../backend/logout.php">🚪 Logout</a></li>
         </ul>
     </nav>
+    <div class="page-container">
 
-    <header>
-        <h1>Sistem Integrasi Penjualan & Gudang</h1>
-        <p>Selamat Datang di Dashboard Utama Aplikasi</p>
-    </header>
+        <header>
+            <h1>Sistem Integrasi Penjualan & Gudang</h1>
+            <p>Selamat Datang di Dashboard Utama Aplikasi</p>
+        </header>
 
-    <!-- Navigasi Menu ala Petanikode -->
-    <nav>
-        <ul>
-<li><a href="form-pesan.php">🛒 Buat Pesanan Baru</a></li>
-            <li><a href="../backend/status-pesanan.php">📋 Lihat Riwayat & Status Pesanan</a></li>
-        </ul>
-    </nav>
-
-    <main>
-        <div class="info-box">
-            <h3>📊 Ringkasan Aktivitas Sistem (Real-time):</h3>
+        <!-- Navigasi Menu ala Petanikode -->
+        <nav>
             <ul>
-                <li>Total Transaksi di Database Penjualan: <strong><?php echo $total_pesanan; ?> pesanan</strong></li>
-                <li>
-                    Produk Terlaris Bulan Ini (Database Gudang):
-                    <strong>
-                        <?php
-                        if ($best_seller) {
-                            echo "ID Produk: " . $best_seller['id_produk'] . " (Terjual: " . $best_seller['jumlah_terjual'] . ")";
-                        } else {
-                            echo "Belum ada data analisis best seller.";
-                        }
-                        ?>
-                    </strong>
-                </li>
+                <li><a href="form-pesan.php">🛒 Buat Pesanan Baru</a></li>
+                <li><a href="../backend/status-pesanan.php">📋 Lihat Riwayat & Status Pesanan</a></li>
             </ul>
-        </div>
+        </nav>
 
-        <p class="sistem-note">
-            *Sistem ini menggunakan koneksi 2 database terpisah (db_penjualan & db_gudang) secara sinkron melalui
-            localhost XAMPP.
-        </p>
-    </main>
+        <main>
+            <div class="info-box">
+                <h3>📊 Ringkasan Aktivitas Sistem (Real-time):</h3>
+                <ul>
+                    <li>Total Transaksi di Database Penjualan: <strong><?php echo $total_pesanan; ?> pesanan</strong></li>
+                    <li>
+                        Produk Terlaris Bulan Ini (Database Gudang):
+                        <strong>
+                            <?php
+                            if ($best_seller) {
+                                echo "ID Produk: " . $best_seller['id_produk'] . " (Terjual: " . $best_seller['jumlah_terjual'] . ")";
+                            } else {
+                                echo "Belum ada data analisis best seller.";
+                            }
+                            ?>
+                        </strong>
+                    </li>
+                </ul>
+            </div>
+
+            <p class="sistem-note">
+                *Sistem ini menggunakan koneksi 2 database terpisah (db_penjualan & db_gudang) secara sinkron melalui
+                localhost XAMPP.
+            </p>
+        </main>
+
+    </div> <!-- .page-container -->
 
 </body>
 
