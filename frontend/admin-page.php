@@ -22,7 +22,9 @@ $total_data = mysqli_num_rows($queryProduk);
 <body class="halaman-admin">
 
     <header class="navbar-admin">
-        <div class="logo-box-nav">logo</div>
+        <div class="logo-box-nav">
+            <img src="../asset/Logo-web.png" alt="Gambar Saya">
+        </div>
         <div class="navbar-right-side">
             <span class="admin-icon">🏢</span>
             <div class="user-profile">

@@ -72,7 +72,9 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
     <div class="page-container">
 
     <header class="navbar-customer">
-        <div class="logo-box-nav">logo</div>
+        <div class="logo-box-nav">
+            <img src="../asset/Logo-web.png" alt="Gambar Saya">
+        </div>
         
         <div class="search-container">
             <span class="search-icon">🔍</span>

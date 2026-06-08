@@ -41,7 +41,9 @@ $best_seller = mysqli_fetch_array($query_best);
 <body class="halaman-pemesanan">
 
     <header class="navbar-customer">
-        <div class="logo-box-nav">logo</div>
+        <div class="logo-box-nav">
+            <img src="../asset/Logo-web.png" alt="Gambar Saya">
+        </div>
         <div class="profile-container">
             <div class="user-profile">
                 <span class="user-avatar">👤</span>

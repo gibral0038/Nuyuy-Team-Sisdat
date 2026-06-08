@@ -11,7 +11,9 @@
 <body class="halaman-login">
 
     <div class="logo-container">
-        <div class="logo-box">Logo</div>
+        <div class="logo-box">
+            <img src="../asset/Logo-web.png" alt="Gambar Saya">
+        </div>
     </div>
 
     <div class="auth-card">
