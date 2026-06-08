@@ -30,6 +30,11 @@ if (isset($_POST['register'])) {
         exit();
     }
 
+    if ($role_pengguna === 'supplier') {
+        $sql = "INSERT INTO supplier (id_supplier, id_pengguna) VALUES ('$id_pengguna', '$id_pengguna')";
+        $querySupplier = mysqli_query($conn_gudang, $sql);
+    }
+
     // 3. Lakukan Query ke db_penjualan pada tabel pengguna
     $sql = "INSERT INTO pengguna (id_pengguna, nama_pengguna, email_pengguna, password_pengguna, role_pengguna) VALUES ('$id_pengguna', '$nama_pengguna', '$email', '$password', '$role_pengguna')";
     $query = mysqli_query($conn_penjualan, $sql);
