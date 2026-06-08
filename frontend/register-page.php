@@ -49,8 +49,8 @@
                         <select name="role_pengguna" id="role_pengguna" required>
                             <option value="supplier">Supplier</option>
                             <option value="customer" selected>Customer</option>
-                            <option value="admin">Admin Gudang</option>
                         </select>
+
                     </div>
                 </div>
             </div>

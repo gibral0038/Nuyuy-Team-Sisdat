@@ -595,6 +595,48 @@ progress::-moz-progress-bar {
     height: 22px; /* Lebih tebal untuk kolom target profit */
 }
 
+/* --- Tombol Logout (semua role) --- */
+.top-logout-nav {
+    margin: 20px 40px 0 40px;
+}
+
+.btn-logout {
+    display: inline-block;
+    background: #ffefef;
+    color: #d00000;
+    font-weight: 700;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(208, 0, 0, 0.25);
+    text-decoration: none;
+    transition: transform .12s, background .12s;
+}
+.btn-logout:hover {
+    background: #ffd8d8;
+    transform: translateY(-1px);
+}
+
+.btn-logout-inline {
+    margin-left: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: background .12s, transform .12s;
+}
+.btn-logout-inline:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateY(-1px);
+}
+
+
 /* --- TABEL LAYOUT UTK HEADER BOX --- */
 .table-header-row {
     display: flex;

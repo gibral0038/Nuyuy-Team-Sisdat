@@ -4,134 +4,261 @@ if (!isset($_SESSION['email_pengguna']) || $_SESSION['role_pengguna'] !== 'suppl
     header("Location: login-page.php");
     exit();
 }
-$id_supplier_aktif = $_SESSION['id_pengguna'];
-include("../backend/koneksi.php"); // Memperbaiki typo .hpp menjadi .php
 
-// Query data produk milik supplier
-$queryProduk = mysqli_query($conn_gudang, "SELECT * FROM produk pd JOIN supplier sp ON pd.id_supplier = sp.id_supplier");
+$id_supplier_aktif = (int)$_SESSION['id_pengguna'];
+include("../backend/koneksi.php");
+
+$pesan = $_GET['pesan'] ?? '';
+$err = $_GET['err'] ?? '';
+
+// ambil produk milik supplier aktif + stok master
+$queryProduk = mysqli_query(
+    $conn_gudang,
+    "SELECT pd.id_produk, pd.nama_produk, pd.deskripsi_produk, pd.harga_produk,
+            g.stok_sekarang
+     FROM produk pd
+     JOIN supplier sp ON pd.id_supplier = sp.id_supplier
+     LEFT JOIN gudang g ON g.id_produk = pd.id_produk
+     WHERE pd.id_supplier = '$id_supplier_aktif'
+     ORDER BY pd.id_produk DESC"
+);
+
+// ambil top selling untuk supplier ini (berdasarkan best_seller)
+$queryBest = mysqli_query(
+    $conn_gudang,
+    "SELECT pd.id_produk, pd.nama_produk, COALESCE(bs.jumlah_terjual,0) AS jumlah_terjual
+     FROM produk pd
+     LEFT JOIN best_seller bs ON bs.id_produk = pd.id_produk
+     WHERE pd.id_supplier = '$id_supplier_aktif'
+     ORDER BY jumlah_terjual DESC
+     LIMIT 4"
+);
+
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman 4 - supplier main</title>
-    <link rel="stylesheet" href="design.css?v=1.3">
+    <title>Halaman Supplier - Manajemen Produk</title>
+    <link rel="stylesheet" href="design.css?v=1.4">
 </head>
 <body class="halaman-supplier">
 
-    <header class="navbar-supplier">
-        <div class="logo-box-nav">logo</div>
-        <div class="navbar-right-side">
-            <span class="truck-icon">🚚</span>
-            <div class="user-profile">
-                <span class="user-avatar">👤</span>
-                <span class="user-name"><?php echo $_SESSION['nama_pengguna'] ?? 'Username'; ?></span>
+<header class="navbar-supplier">
+    <div class="logo-box-nav">logo</div>
+    <div class="navbar-right-side">
+        <span class="truck-icon">🚚</span>
+        <div class="user-profile">
+            <span class="user-avatar">👤</span>
+            <span class="user-name"><?php echo htmlspecialchars($_SESSION['nama_pengguna'] ?? 'Username'); ?></span>
+            <a class="btn-logout-inline" href="../backend/logout.php" title="Logout">🚪</a>
+        </div>
+    </div>
+</header>
+
+<main class="supplier-dashboard-content">
+
+    <section class="supplier-column">
+        <h2>Produk & Stok</h2>
+
+        <div class="card-list-box">
+            <?php if ($pesan): ?>
+                <div class="info-box" style="margin-top:0; border-left-color:#e05300;">
+                    <?php
+                        if ($pesan === 'tambah_produk_sukses') echo 'Produk berhasil ditambahkan.';
+                        elseif ($pesan === 'tambah_produk_gagal') echo 'Gagal menambahkan produk.';
+                        elseif ($pesan === 'tambah_stok_sukses') echo 'Stok berhasil ditambahkan.';
+                        elseif ($pesan === 'tambah_stok_gagal') echo 'Gagal menambah stok.';
+                        elseif ($pesan === 'edit_sukses') echo 'Produk berhasil diupdate.';
+                        elseif ($pesan === 'edit_gagal') echo 'Gagal mengupdate produk.';
+                        elseif ($pesan === 'hapus_sukses') echo 'Produk berhasil dihapus.';
+                        elseif ($pesan === 'hapus_gagal') echo 'Gagal menghapus produk.';
+                        else echo htmlspecialchars($pesan);
+                    ?>
+                    <?php if ($err): ?><div style="margin-top:6px; color:#b00020; font-size:12px;">Error: <?php echo htmlspecialchars($err); ?></div><?php endif; ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="table-header-row" style="padding-left:0;">
+                <span>Nama Produk</span>
+                <span>Stok</span>
+                <span>Aksi</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:12px;">
+            <?php
+                $hasData = false;
+                while ($row = mysqli_fetch_array($queryProduk)) {
+                    $hasData = true;
+                    $stok = (int)($row['stok_sekarang'] ?? 0);
+            ?>
+                <div class="item-list-row align-center" style="gap:12px;">
+                    <div class="img-mini-placeholder">📦</div>
+                    <div class="item-row-detail" style="gap:2px;">
+                        <div class="row-title-flex">
+                            <span class="item-name"><?php echo htmlspecialchars($row['nama_produk']); ?></span>
+                            <span class="item-qty">ID <?php echo (int)$row['id_produk']; ?></span>
+                        </div>
+                        <div style="font-size:13px; color:#333; font-weight:bold;">Stok Saat Ini: <?php echo $stok; ?></div>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button class="btn-edit" type="button" data-edit="<?php echo (int)$row['id_produk']; ?>" onclick="window.bbSupplierEdit(this)">⚙️</button>
+                        <form action="../backend/proses-hapus-produk.php" method="POST" onsubmit="return confirm('Hapus produk ini?');">
+                            <input type="hidden" name="id_produk" value="<?php echo (int)$row['id_produk']; ?>" />
+                            <button class="btn-delete" type="submit" name="hapus_produk">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <?php if (!$hasData): ?>
+                <div class="item-list-row" style="justify-content:center;">
+                    <span style="color:#666; font-weight:bold;">Belum ada produk.</span>
+                </div>
+            <?php endif; ?>
             </div>
         </div>
-    </header>
+    </section>
 
-    <main class="supplier-dashboard-content">
-        
-        <section class="supplier-column">
-            <h2>Bahan Baku</h2>
-            <div class="card-list-box">
-                
-                <?php
-                if (mysqli_num_rows($queryProduk) > 0) {
-                    while ($produk = mysqli_fetch_array($queryProduk)) {
-                        $stok = $produk['stok_produk'];
-                        $max_kapasitas = 100; // Standar maksimal progress bar
-                ?>
-                <div class="item-list-row">
-                    <div class="img-mini-placeholder">🌄</div>
-                    <div class="item-row-detail">
-                        <div class="row-title-flex">
-                            <span class="item-name"><?php echo $produk['nama_produk']; ?></span>
-                            <span class="item-qty">jumlah</span>
+    <section class="supplier-column">
+        <h2>CRUD Produk</h2>
+
+        <div class="card-list-box">
+            <h3 style="margin:0 0 10px 0; font-size:18px;">Tambah Produk</h3>
+            <form action="../backend/proses-tambah-produk.php" method="POST" class="crud-form">
+                <input type="hidden" name="tambah_produk" value="1" />
+
+                <label style="font-weight:bold; font-size:13px;">Nama Produk</label>
+                <input name="nama_produk" required class="crud-input" />
+
+                <label style="font-weight:bold; font-size:13px;">Deskripsi</label>
+                <input name="deskripsi_produk" required class="crud-input" />
+
+                <label style="font-weight:bold; font-size:13px;">Harga</label>
+                <input type="number" name="harga_produk" min="0" required class="crud-input" />
+
+                <label style="font-weight:bold; font-size:13px;">Stok Awal</label>
+                <input type="number" name="stok_awal" min="0" required class="crud-input" />
+
+                <button type="submit" class="btn-buy" style="margin-top:12px;">Tambah</button>
+            </form>
+        </div>
+
+        <div class="card-list-box" style="margin-top:25px;">
+            <h3 style="margin:0 0 10px 0; font-size:18px;">Edit Produk (replace stok)</h3>
+            <form action="../backend/proses-edit-produk.php" method="POST" class="crud-form">
+                <input type="hidden" name="update_produk" value="1" />
+                <input type="hidden" id="edit_id_produk" name="id_produk" value="" />
+
+                <label style="font-weight:bold; font-size:13px;">Nama Produk</label>
+                <input id="edit_nama_produk" name="nama_produk" required class="crud-input" />
+
+                <label style="font-weight:bold; font-size:13px;">Deskripsi</label>
+                <input id="edit_deskripsi_produk" name="deskripsi_produk" required class="crud-input" />
+
+                <label style="font-weight:bold; font-size:13px;">Harga</label>
+                <input type="number" id="edit_harga_produk" name="harga_produk" min="0" required class="crud-input" />
+
+                <label style="font-weight:bold; font-size:13px;">Stok Baru (replace)</label>
+                <input type="number" id="edit_stok_produk_baru" name="stok_produk_baru" min="0" required class="crud-input" />
+
+                <button id="btnSaveEdit" type="submit" class="btn-buy" style="margin-top:12px;">Simpan Edit</button>
+            </form>
+
+            <div style="height:14px;"></div>
+
+            <h3 style="margin:0 0 10px 0; font-size:18px;">Tambah Stok</h3>
+            <form action="../backend/proses-tambah-stok.php" method="POST" class="crud-form">
+                <input type="hidden" name="tambah_stok" value="1" />
+                <input type="hidden" id="stok_id_produk" name="id_produk" value="" />
+
+                <label style="font-weight:bold; font-size:13px;">Jumlah Tambah</label>
+                <input type="number" name="jumlah_tambah" min="1" required class="crud-input" />
+
+                <button type="submit" class="btn-auth" style="margin-top:12px;">Tambah Stok</button>
+            </form>
+
+            <div style="font-size:12px; color:#666; margin-top:10px;">
+                Tips: klik tombol ⚙️ di daftar produk untuk mengisi form edit/tambah stok.
+            </div>
+        </div>
+    </section>
+
+    <section class="supplier-column flex-column-gap">
+        <div class="sub-target-box">
+            <h2>Top Terjual (Best Seller)</h2>
+            <?php if (mysqli_num_rows($queryBest) > 0): ?>
+                <?php while ($b = mysqli_fetch_array($queryBest)): ?>
+                    <div class="item-list-row align-center small-padding" style="margin-bottom:10px;">
+                        <div class="img-mini-placeholder icon-small">🔥</div>
+                        <span class="report-menu-name"><?php echo htmlspecialchars($b['nama_produk']); ?></span>
+                        <span class="report-total"><?php echo (int)$b['jumlah_terjual']; ?></span>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div style="color:#666; font-weight:bold;">Belum ada data penjualan.</div>
+            <?php endif; ?>
+        </div>
+
+        <div class="sub-laporan-box">
+            <h2>Laporan</h2>
+            <div class="table-header-row border-bottom">
+                <span>Menu</span>
+                <span>Penjualan</span>
+            </div>
+            <?php
+                // laporan sederhana: ambil top 4 dari supplier berdasarkan best_seller
+                // (laporan detail bisa ditingkatkan belakangan)
+                $qLap = mysqli_query(
+                    $conn_gudang,
+                    "SELECT pd.nama_produk, COALESCE(bs.jumlah_terjual,0) AS jumlah_terjual
+                     FROM produk pd
+                     LEFT JOIN best_seller bs ON bs.id_produk = pd.id_produk
+                     WHERE pd.id_supplier = '$id_supplier_aktif'
+                     ORDER BY jumlah_terjual DESC
+                     LIMIT 4"
+                );
+                if ($qLap) {
+                    while ($l = mysqli_fetch_array($qLap)) {
+            ?>
+                        <div class="item-list-row align-center small-padding">
+                            <div class="img-mini-placeholder icon-small">📊</div>
+                            <span class="report-menu-name"><?php echo htmlspecialchars($l['nama_produk']); ?></span>
+                            <span class="report-total"><?php echo (int)$l['jumlah_terjual']; ?></span>
                         </div>
-                        <progress value="<?php echo $stok; ?>" max="<?php echo $max_kapasitas; ?>"></progress>
-                    </div>
-                </div>
-                <?php 
-                    }
-                } else {
-                    // Jika database kosong, ini contoh dummy agar layout tetap terisi sesuai mockup gambar
-                    for ($i=1; $i<=6; $i++) {
-                        $dummy_values = [90, 15, 60, 50, 95, 40];
-                ?>
-                <div class="item-list-row">
-                    <div class="img-mini-placeholder">🌄</div>
-                    <div class="item-row-detail">
-                        <div class="row-title-flex">
-                            <span class="item-name">nama bahan</span>
-                            <span class="item-qty">jumlah</span>
-                        </div>
-                        <progress value="<?php echo $dummy_values[$i-1]; ?>" max="100"></progress>
-                    </div>
-                </div>
-                <?php
-                    }
-                }
-                ?>
+            <?php } }
+            ?>
+        </div>
+    </section>
 
-            </div>
-        </section>
+</main>
 
-        <section class="supplier-column">
-            <h2>Pesanan</h2>
-            <div class="card-list-box">
-                <div class="table-header-row">
-                    <span>nama pemesan</span>
-                    <span>Item</span>
-                    <span>Status</span>
-                </div>
-                
-                <?php for($i=1; $i<=6; $i++): ?>
-                <div class="item-list-row align-center">
-                    <div class="img-mini-placeholder">🌄</div>
-                    <div class="pesan-row-detail">
-                        <span class="buyer-name">nama pemesan</span>
-                        <span class="buyer-item">pesanan jumlah</span>
-                    </div>
-                    <span class="status-tag">status</span>
-                </div>
-                <?php endfor; ?>
-
-            </div>
-        </section>
-
-        <section class="supplier-column flex-column-gap">
-            
-            <div class="sub-target-box">
-                <h2>Target</h2>
-                <div class="target-info">
-                    <span class="target-price">Rp. ........... / Rp ...........</span>
-                    <span class="target-percentage">...%</span>
-                </div>
-                <progress value="65" max="100" class="progress-target"></progress>
-            </div>
-
-            <div class="sub-laporan-box">
-                <h2>Laporan</h2>
-                <div class="table-header-row border-bottom">
-                    <span>Menu</span>
-                    <span>Penjualan</span>
-                </div>
-
-                <?php for($i=1; $i<=4; $i++): ?>
-                <div class="item-list-row align-center small-padding">
-                    <div class="img-mini-placeholder icon-small">🌄</div>
-                    <span class="report-menu-name">nama menu</span>
-                    <span class="report-total">total</span>
-                </div>
-                <?php endfor; ?>
-            </div>
-
-        </section>
-
-    </main>
-
+<script src="../backend/script.js"></script>
+<script>
+    // Supplier page needs edit metadata
+    window.bbSupplierProducts = <?php
+        $arr = [];
+        // reuse query by re-running
+        $q = mysqli_query(
+            $conn_gudang,
+            "SELECT pd.id_produk, pd.nama_produk, pd.deskripsi_produk, pd.harga_produk,
+                    COALESCE(g.stok_sekarang,0) AS stok_sekarang
+             FROM produk pd
+             WHERE pd.id_supplier = '$id_supplier_aktif'"
+        );
+        while ($p = mysqli_fetch_array($q)) {
+            $arr[] = [
+                'id_produk' => (int)$p['id_produk'],
+                'nama_produk' => $p['nama_produk'],
+                'deskripsi_produk' => $p['deskripsi_produk'],
+                'harga_produk' => (int)$p['harga_produk'],
+                'stok_sekarang' => (int)$p['stok_sekarang'],
+            ];
+        }
+        echo json_encode($arr);
+    ?>;
+</script>
 </body>
 </html>
+

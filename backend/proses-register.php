@@ -13,8 +13,16 @@ if (isset($_POST['register'])) {
     $password = $_POST['password'];
     $role_pengguna = $_POST['role_pengguna'];
 
+    // Validasi: hanya boleh register role customer atau supplier.
+    $role_pengguna = strtolower($role_pengguna);
+    if ($role_pengguna !== 'customer' && $role_pengguna !== 'supplier') {
+        header("Location: ../frontend/register-page.php?pesan=role_tidak_valid");
+        exit();
+    }
+
     $sql = "SELECT * FROM pengguna WHERE email_pengguna = '$email'";
     $queryP = mysqli_query($conn_penjualan, $sql);
+
     if (mysqli_num_rows($queryP) > 0) {
         // JIKA ADA (Email sudah terdaftar di database)
         // Alihkan ke halaman register sambil membawa pesan peringatan

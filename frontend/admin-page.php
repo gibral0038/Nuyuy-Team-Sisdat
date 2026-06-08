@@ -28,6 +28,7 @@ $total_data = mysqli_num_rows($queryProduk);
             <div class="user-profile">
                 <span class="user-avatar">👤</span>
                 <span class="user-name"><?php echo $_SESSION['nama_pengguna'] ?? 'Admin'; ?></span>
+                <a class="btn-logout-inline" href="../backend/logout.php" title="Logout">🚪</a>
             </div>
         </div>
     </header>

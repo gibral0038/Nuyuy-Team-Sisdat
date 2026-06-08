@@ -1,10 +1,57 @@
+<?php
+session_start();
+// Proteksi halaman: Tendang jika belum login atau bukan customer
+if (!isset($_SESSION['email_pengguna']) || $_SESSION['role_pengguna'] !== 'customer') {
+    header("Location: login-page.php");
+    exit();
+}
+
+include("../backend/koneksi.php");
+$id_customer = $_SESSION['id_pengguna'];
+
+// 1. Ambil data Riwayat Pesanan Customer (maks 6 terbaru)
+$queryRiwayat = mysqli_query(
+    $conn_penjualan,
+    "SELECT id_pesanan, tanggal_pesanan, status_pesanan FROM pesanan WHERE id_pengguna = '$id_customer' ORDER BY tanggal_pesanan DESC LIMIT 6"
+);
+$riwayat_data = [];
+while ($row = mysqli_fetch_array($queryRiwayat)) {
+    $riwayat_data[] = $row;
+}
+$total_riwayat = count($riwayat_data);
+$titik_tengah = ceil($total_riwayat / 2);
+
+// 2. Ambil data Menu yang stoknya masih ada (sumber stok utama: gudang.stok_sekarang)
+$queryKatalog = mysqli_query(
+    $conn_gudang,
+    "SELECT p.id_produk, p.nama_produk, p.deskripsi_produk, p.harga_produk, IFNULL(b.jumlah_terjual,0) AS terjual, g.stok_sekarang AS stok_produk 
+     FROM produk p 
+     LEFT JOIN gudang g ON g.id_produk = p.id_produk 
+     LEFT JOIN best_seller b ON p.id_produk = b.id_produk 
+     WHERE g.stok_sekarang > 0"
+);
+
+// 3. Ambil 1 pesanan terakhir untuk seksi "Pesan Lagi"
+$queryPesanLagi = mysqli_query(
+    $conn_penjualan,
+    "SELECT d.id_produk, g.nama_produk, g.harga_produk 
+     FROM detail_pesanan d 
+     JOIN pesanan ps ON d.id_pesanan = ps.id_pesanan 
+     JOIN (SELECT id_produk, nama_produk, harga_produk FROM db_gudang.produk) g ON d.id_produk = g.id_produk 
+     WHERE ps.id_pengguna = '$id_customer' 
+     ORDER BY ps.tanggal_pesanan DESC LIMIT 1"
+);
+$pesan_lagi = mysqli_fetch_array($queryPesanLagi);
+?>
+
+
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dasboard Customer - Pemesanan</title>
+    <title>Dashboard Customer - Pemesanan</title>
     <link rel="stylesheet" href="design.css">
 </head>
 
@@ -22,7 +69,8 @@
             <span class="cart-icon">🛒</span>
             <div class="user-profile">
                 <span class="user-avatar">👤</span>
-                <span class="user-name">Username</span>
+                <span class="user-name"><?php echo $_SESSION['nama_pengguna']; ?></span>
+                <a class="btn-logout-inline" href="../backend/logout.php" title="Logout">🚪</a>
             </div>
         </div>
     </header>
@@ -34,14 +82,27 @@
                 <h3>Riwayat Pembelian</h3>
                 <div class="riwayat-grid">
                     <div class="riwayat-col">
-                        <div class="riwayat-item"><span>nama pesanan</span> <strong>total Penjualan</strong></div>
-                        <div class="riwayat-item"><span>nama pesanan</span> <strong>total Penjualan</strong></div>
-                        <div class="riwayat-item"><span>nama pesanan</span> <strong>total Penjualan</strong></div>
+                        <?php 
+                        for ($i = 0; $i < $titik_tengah; $i++) { 
+                            $status = $riwayat_data[$i]['status_pesanan'];
+                        ?>
+                            <div class="riwayat-item">
+                                <span><?php echo $riwayat_data[$i]['id_pesanan']; ?></span>
+                                <strong><?php echo $status; ?></strong>
+                            </div>
+                        <?php } ?>
                     </div>
-                    <div class="riwayat-col border-left">
-                        <div class="riwayat-item"><span>nama pesanan</span> <strong>total Penjualan</strong></div>
-                        <div class="riwayat-item"><span>nama pesanan</span> <strong>total Penjualan</strong></div>
-                        <div class="riwayat-item"><span>nama pesanan</span> <strong>total Penjualan</strong></div>
+
+                <div class="riwayat-col border-left">
+                        <?php 
+                        for ($i = $titik_tengah; $i < $total_riwayat; $i++) { 
+                            $status = $riwayat_data[$i]['status_pesanan'];
+                        ?>
+                            <div class="riwayat-item">
+                                <span><?php echo $riwayat_data[$i]['id_pesanan']; ?></span> 
+                                <strong><?php echo $status; ?></strong>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </section>
@@ -51,9 +112,15 @@
                 <div class="menu-card-horizontal">
                     <div class="img-placeholder">🌄</div>
                     <div class="menu-detail">
-                        <h4>nama pesanan</h4>
-                        <span class="sold-count">total Penjualan</span>
-                        <span class="menu-price">harga pesanan</span>
+                        <?php if ($pesan_lagi) { ?>
+                            <h4><?php echo $pesan_lagi['nama_produk']; ?></h4>
+                            <span class="sold-count">Pembelian Terakhir Anda</span>
+                            <span class="menu-price">Rp <?php echo number_format($pesan_lagi['harga_produk'], 0, ',', '.'); ?></span>
+                        <?php } else { ?>
+                            <h4>Belum Ada Riwayat</h4>
+                            <span class="sold-count">-</span>
+                            <span class="menu-price">Rp 0</span>
+                        <?php } ?>
                     </div>
                 </div>
             </section>
@@ -63,58 +130,30 @@
             <h3 class="section-title">Menu</h3>
             
             <div class="menu-grid">
-                
+                <?php 
+                // Looping data menu dari database gudang
+                while ($menu = mysqli_fetch_array($queryKatalog)) { 
+                ?>
                 <div class="menu-card">
                     <form action="../backend/proses-pesan.php" method="POST">
                         <div class="img-placeholder">🌄</div>
                         <div class="menu-detail">
-                            <input type="hidden" name="id_produk" value="101" /> 
+                            <input type="hidden" name="id_produk" value="<?php echo $menu['id_produk']; ?>" />
+                            <input type="hidden" name="total_bayar" value="<?php echo $menu['harga_produk']; ?>" />
                             
-                            <h4>Nasi Goreng Spesial</h4>
-                            <span class="sold-count">Terjual 120 porsi</span>
-                            <span class="menu-price">Rp 15.000</span>
+                            <h4><?php echo $menu['nama_produk']; ?></h4>
+                            <span class="sold-count">Terjual <?php echo $menu['terjual']; ?> porsi (Sisa: <?php echo $menu['stok_produk']; ?>)</span>
+                            <span class="menu-price">Rp <?php echo number_format($menu['harga_produk'], 0, ',', '.'); ?></span>
                             
                             <div class="action-buy">
-                                <input type="number" name="jumlah_beli" value="1" min="1" required class="input-qty" />
+                                <input type="number" name="jumlah_beli" value="1" min="1" max="<?php echo $menu['stok_produk']; ?>" required class="input-qty" />
                                 <button type="submit" name="checkout" class="btn-buy">Beli</button>
                             </div>
                         </div>
                     </form>
                 </div>
-
-                <div class="menu-card">
-                    <form action="../backend/proses-pesan.php" method="POST">
-                        <div class="img-placeholder">🌄</div>
-                        <div class="menu-detail">
-                            <input type="hidden" name="id_produk" value="102" />
-                            <h4>Mie Ayam Bakso</h4>
-                            <span class="sold-count">Terjual 85 porsi</span>
-                            <span class="menu-price">Rp 13.000</span>
-                            <div class="action-buy">
-                                <input type="number" name="jumlah_beli" value="1" min="1" required class="input-qty" />
-                                <button type="submit" name="checkout" class="btn-buy">Beli</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="menu-card">
-                    <form action="../backend/proses-pesan.php" method="POST">
-                        <div class="img-placeholder">🌄</div>
-                        <div class="menu-detail">
-                            <input type="hidden" name="id_produk" value="103" />
-                            <h4>Es Teh Manis Jumbo</h4>
-                            <span class="sold-count">Terjual 340 porsi</span>
-                            <span class="menu-price">Rp 4.000</span>
-                            <div class="action-buy">
-                                <input type="number" name="jumlah_beli" value="1" min="1" required class="input-qty" />
-                                <button type="submit" name="checkout" class="btn-buy">Beli</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                </div>
+                <?php } ?>
+            </div>
         </section>
 
     </main>

@@ -44,9 +44,9 @@ $best_seller = mysqli_fetch_array($query_best);
 </head>
 
 <body class="index-php">
-    <nav>
+    <nav class="top-logout-nav">
         <ul>
-            <li><a href="../backend/logout.php" style="color: red; font-weight: bold;">🚪 Keluar (Logout)</a></li>
+            <li><a class="btn-logout" href="../backend/logout.php">🚪 Logout</a></li>
         </ul>
     </nav>
 
