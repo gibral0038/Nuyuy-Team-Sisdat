@@ -19,8 +19,8 @@ $id_supplier = (int)$_SESSION['id_pengguna'];
 
 mysqli_begin_transaction($conn_gudang);
 try {
-    $sqlProduk = "INSERT INTO produk (id_supplier, nama_produk, deskripsi_produk, harga_produk)
-                  VALUES ('$id_supplier', '$nama_produk', '$deskripsi_produk', '$harga_produk')";
+    $sqlProduk = "INSERT INTO produk (id_supplier, nama_produk, deskripsi_produk, harga_produk, stok_produk)
+                  VALUES ('$id_supplier', '$nama_produk', '$deskripsi_produk', '$harga_produk', '$stok_awal')";
     $q1 = mysqli_query($conn_gudang, $sqlProduk);
     if (!$q1) {
         throw new Exception('Gagal menambah produk.');
