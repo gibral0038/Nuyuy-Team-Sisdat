@@ -26,7 +26,7 @@ html,body{
     max-width: 1320px;
     margin: 0 auto;
     padding: 20px;
-    padding-top: 90px; /* ruang untuk tombol logout yang fixed */
+    padding-top: 0; /* hapus spasi atas agar navbar menempel ke atas */
 }
 
 /* Consistent section/card appearance */
@@ -261,6 +261,10 @@ INTERFACE STYLE UNTUK FORM-PESAN
 .halaman-pemesanan {
     display: block;
     height: auto;
+    margin-right: 20px;
+    margin-left: 20px;
+    background-color: #f6efe9; /* Warna krem background utama mockup */
+    padding: 20px;
     background-color: #f6efe9;
     padding-bottom: 50px;
 }
