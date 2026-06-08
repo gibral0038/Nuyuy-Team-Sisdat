@@ -22,7 +22,10 @@ include("../backend/koneksi.php");
 $query_pesanan = mysqli_query($conn_penjualan, "SELECT id_pengguna FROM pesanan");
 $total_pesanan = mysqli_num_rows($query_pesanan);
 
-$query_best = mysqli_query($conn_gudang, "SELECT id_produk, jumlah_terjual FROM best_seller ORDER BY jumlah_terjual DESC LIMIT 1");
+$query_best = mysqli_query($conn_gudang, "SELECT bs.id_produk, bs.jumlah_terjual, p.nama_produk 
+    FROM best_seller bs 
+    JOIN produk p ON bs.id_produk = p.id_produk 
+    ORDER BY bs.jumlah_terjual DESC LIMIT 1");
 $best_seller = mysqli_fetch_array($query_best);
 ?>
 
@@ -70,7 +73,7 @@ $best_seller = mysqli_fetch_array($query_best);
                     <div class="img-placeholder">🔥</div>
                     <div class="menu-detail">
                         <?php if ($best_seller): ?>
-                            <h4>ID Produk: <?php echo (int)$best_seller['id_produk']; ?></h4>
+                            <h4><?php echo htmlspecialchars($best_seller['nama_produk']); ?></h4>
                             <span class="sold-count">Produk Terlaris Bulan Ini</span>
                             <span class="menu-price">Terjual: <?php echo (int)$best_seller['jumlah_terjual']; ?> pcs</span>
                         <?php else: ?>
