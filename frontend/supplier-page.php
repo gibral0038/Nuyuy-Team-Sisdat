@@ -206,7 +206,34 @@ $queryBest = mysqli_query(
 
 </main>
 
-<script src="../backend/script.js"></script>
+<script>
+    window.bbSupplierProducts = <?php echo json_encode($arr); ?>;
+
+    window.bbSupplierTambahStok = function (btnEl) {
+        const id = btnEl?.getAttribute('data-edit');
+        if (!id) { alert('ID tidak ditemukan'); return; }
+
+        const item = window.bbSupplierProducts.find(
+            (x) => String(x.id_produk) === String(id)
+        );
+        if (!item) { alert('Produk tidak ditemukan: ' + id); return; }
+
+        // Isi hidden input
+        document.getElementById('stok_id_produk').value = item.id_produk;
+
+        // Tampilkan label nama produk (opsional)
+        const label = document.getElementById('stok_nama_produk_label');
+        if (label) label.textContent = item.nama_produk;
+
+        // Tampilkan container
+        const container = document.getElementById('bbSupplierTambahStokContainer');
+        if (!container) { alert('Container tidak ditemukan!'); return; }
+
+        container.style.display = 'block';
+        container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+</script>
+
 <script>
     window.bbSupplierProducts = <?php
         $arr = [];
