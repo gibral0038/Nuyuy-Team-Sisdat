@@ -4,9 +4,10 @@ include("koneksi.php");
 
 $id_customer = (int)$_SESSION['id_pengguna'];
 
-$sql = "SELECT pn.id_pesanan, dp.id_produk, dp.jumlah, pn.status_pesanan AS status 
+$sql = "SELECT pn.id_pesanan, p.nama_produk, dp.jumlah, pn.status_pesanan AS status 
         FROM pesanan pn 
         JOIN detail_pesanan dp ON pn.id_pesanan = dp.id_pesanan
+        JOIN db_gudang.produk p ON dp.id_produk = p.id_produk
         WHERE pn.id_pengguna = '$id_customer'
         ORDER BY pn.id_pesanan DESC";
 
@@ -86,7 +87,7 @@ $query = mysqli_query($conn_penjualan, $sql);
                         <tr>
                             <th style="position:sticky; top:0; background:#f0d5bb; z-index:1;">No</th>
                             <th style="position:sticky; top:0; background:#f0d5bb; z-index:1;">ID Pesanan</th>
-                            <th style="position:sticky; top:0; background:#f0d5bb; z-index:1;">ID Produk</th>
+                            <th style="position:sticky; top:0; background:#f0d5bb; z-index:1;">Produk</th>
                             <th style="position:sticky; top:0; background:#f0d5bb; z-index:1;">Jumlah</th>
                             <th style="position:sticky; top:0; background:#f0d5bb; z-index:1;">Status</th>
                         </tr>
@@ -98,7 +99,7 @@ $query = mysqli_query($conn_penjualan, $sql);
                                 <tr>
                                     <td><?php echo $no++; ?></td>
                                     <td><?php echo (int)$pesanan['id_pesanan']; ?></td>
-                                    <td><?php echo (int)$pesanan['id_produk']; ?></td>
+                                    <td><?php echo htmlspecialchars($pesanan['nama_produk']); ?></td>
                                     <td><?php echo (int)$pesanan['jumlah']; ?></td>
                                     <td>
                                         <span style="background:<?php echo $pesanan['status'] == 'selesai' ? '#d4edda' : ($pesanan['status'] == 'diproses' ? '#fff3cd' : '#f8d7da'); ?>; color:<?php echo $pesanan['status'] == 'selesai' ? '#155724' : ($pesanan['status'] == 'diproses' ? '#856404' : '#721c24'); ?>; padding:4px 10px; border-radius:20px; font-size:13px; font-weight:bold;">
