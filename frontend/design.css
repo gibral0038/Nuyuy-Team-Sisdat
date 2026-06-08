@@ -1,14 +1,65 @@
 /*
 =================================
-INTERFACE STYLE UNTUK INDEX PHP
+GLOBAL LAYOUT & THEME
 =================================
 */
-.index-php {
-    font-family: Arial, sans-serif;
-    margin: 40px;
-    line-height: 1.6;
-    background-color: #ffffff;
+:root{
+    --bg-krem: #f6efe9;
+    --bg-krem-2: #ede2d7;
+    --card-krem: #ebd3bc;
+    --accent: #e05300;
+    --muted: #8c8c8c;
+    --green: #abc956;
 }
+
+html,body{
+    height:100%;
+    margin:0;
+    padding:0;
+    font-family: 'Arial', sans-serif;
+    background: var(--bg-krem);
+    color: #111;
+}
+
+/* Page container used by pages to center content */
+.page-container{
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-top: 90px; /* ruang untuk tombol logout yang fixed */
+}
+
+/* Consistent section/card appearance */
+.card-section, .section, .debug-section{
+    background: linear-gradient(to bottom, #f0d5bb, #e6caa3);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+/* Headings */
+h1,h2,h3{font-weight:700; margin:0 0 12px 0}
+h1{font-size:32px}
+h2{font-size:28px}
+h3{font-size:22px}
+
+/* Links consistent */
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Small utility */
+.muted{color:#666; font-size:13px}
+
+/* Utility for status text used in debug pages */
+.error{color:#b00020;font-weight:700}
+.success{color:#0b6623;font-weight:700}
+
+/* Tables inside card-section should look modern */
+.card-section table{width:100%; border-collapse:collapse; margin-top:12px}
+.card-section th, .card-section td{border:1px solid rgba(0,0,0,0.06); padding:10px; text-align:left}
+.card-section th{background:rgba(255,255,255,0.6); font-weight:700}
+
+
 
 header {
     margin-bottom: 20px;
@@ -434,7 +485,7 @@ INTERFACE STYLE UNTUK SUPPLIER-PAGE
     font-family: 'Arial', sans-serif;
 }
 
-/* --- NAVBAR KAPSUL LONJONG (SAMA PERSIS DENGAN MOCKUP) --- */
+/* --- NAVBAR KAPSUL LONJONG */
 .navbar-supplier {
     background-color: #f2d2b6; /* Warna krem orange pastel navbar */
     display: flex;
@@ -601,7 +652,11 @@ progress::-moz-progress-bar {
 
 /* --- Tombol Logout (semua role) --- */
 .top-logout-nav {
-    margin: 20px 40px 0 40px;
+    margin: 0; /* reset margin, posisi akan diatur fixed */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
 }
 
 .btn-logout {

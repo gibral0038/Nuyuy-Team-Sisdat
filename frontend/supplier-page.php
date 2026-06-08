@@ -61,6 +61,8 @@ while ($p = mysqli_fetch_array($qArr)) {
 </head>
 <body class="halaman-supplier">
 
+<div class="page-container">
+
 <header class="navbar-supplier">
     <div class="logo-box-nav">logo</div>
     <div class="navbar-right-side">
@@ -253,5 +255,8 @@ while ($p = mysqli_fetch_array($qArr)) {
         container.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 </script>
+
+    </div> <!-- .page-container -->
+
 </body>
 </html>
