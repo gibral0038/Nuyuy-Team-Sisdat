@@ -51,7 +51,7 @@ if(isset($_POST['checkout'])){
 
         // TAHAP 1: DATABASE PENJUALAN (mengikuti schema backend/penjualan.sql)
         // 1) Pesanan (status awal: pending)
-        $sql1 = "INSERT INTO pesanan (id_pengguna, status_pesanan, tanggal_pesanan) VALUES ('$id_customer', 'pending', NOW())";
+        $sql1 = "INSERT INTO pesanan (id_pengguna, status_pesanan, tanggal_pesanan) VALUES ('$id_customer', 'pending', CURDATE())";
         $q1 = mysqli_query($conn_penjualan, $sql1);
         if (!$q1) {
             throw new Exception('Gagal insert pesanan: ' . mysqli_error($conn_penjualan));
