@@ -76,7 +76,7 @@ while ($p = mysqli_fetch_array($qArr)) {
 <main class="supplier-dashboard-content">
 
     <section class="supplier-column">
-        <h2>Produk & Stok</h2>
+        <h2>PRODUK & STOK</h2>
 
         <div class="card-list-box">
             <?php if ($pesan): ?>
@@ -137,7 +137,7 @@ while ($p = mysqli_fetch_array($qArr)) {
     </section>
 
     <section class="supplier-column">
-        <h2>CRUD Produk</h2>
+        <h2>TAMBAH PRODUK</h2>
 
         <div class="card-list-box">
             <h3 style="margin:0 0 10px 0; font-size:18px;">Tambah Produk</h3>

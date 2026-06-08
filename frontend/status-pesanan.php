@@ -9,11 +9,13 @@ if (!isset($_SESSION['email_pengguna']) || $_SESSION['role_pengguna'] !== 'custo
 
 $id_customer = (int)$_SESSION['id_pengguna'];
 
-// status_pesanan bisa tampil untuk pending/diproses/selesai
+// Ambil data pesanan dengan detail produk dan harga
 $sql = "SELECT pn.id_pesanan, pn.tanggal_pesanan, pn.status_pesanan,
-               dp.id_produk, dp.jumlah
+               dp.id_produk, dp.jumlah, dp.harga_total,
+               gd.nama_produk
         FROM pesanan pn
         JOIN detail_pesanan dp ON pn.id_pesanan = dp.id_pesanan
+        LEFT JOIN db_gudang.produk gd ON dp.id_produk = gd.id_produk
         WHERE pn.id_pengguna = '$id_customer'
         ORDER BY pn.tanggal_pesanan DESC, pn.id_pesanan DESC";
 
@@ -51,8 +53,9 @@ $query = mysqli_query($conn_penjualan, $sql);
                     <tr>
                         <th>ID Pesanan</th>
                         <th>Tanggal</th>
-                        <th>ID Produk</th>
+                        <th>Produk</th>
                         <th>Jumlah</th>
+                        <th>Total Harga</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -62,13 +65,14 @@ $query = mysqli_query($conn_penjualan, $sql);
                             <tr>
                                 <td><?php echo (int)$row['id_pesanan']; ?></td>
                                 <td><?php echo htmlspecialchars($row['tanggal_pesanan'] ?? ''); ?></td>
-                                <td><?php echo (int)$row['id_produk']; ?></td>
-                                <td><?php echo (int)$row['jumlah']; ?></td>
+                                <td><?php echo htmlspecialchars($row['nama_produk'] ?? 'N/A'); ?></td>
+                                <td style="text-align:center;"><?php echo (int)$row['jumlah']; ?></td>
+                                <td>Rp <?php echo number_format((int)$row['harga_total'], 0, ',', '.'); ?></td>
                                 <td><b><?php echo htmlspecialchars($row['status_pesanan'] ?? ''); ?></b></td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
-                        <tr><td colspan="5" style="text-align:center; color:#666; font-weight:bold;">Belum ada pesanan.</td></tr>
+                        <tr><td colspan="6" style="text-align:center; color:#666; font-weight:bold;">Belum ada pesanan.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

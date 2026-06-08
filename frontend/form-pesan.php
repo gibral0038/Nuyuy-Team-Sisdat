@@ -77,6 +77,21 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
 
     <main class="dashboard-content">
         
+        <?php if (isset($_GET['pesan'])): ?>
+            <div style="background: <?php echo ($_GET['pesan'] === 'berhasil') ? '#d4edda' : '#f8d7da'; ?>; border: 1px solid <?php echo ($_GET['pesan'] === 'berhasil') ? '#c3e6cb' : '#f5c6cb'; ?>; color: <?php echo ($_GET['pesan'] === 'berhasil') ? '#155724' : '#721c24'; ?>; padding: 12px; border-radius: 4px; margin-bottom: 15px;">
+                <?php 
+                    if ($_GET['pesan'] === 'berhasil') {
+                        echo '✅ Pesanan berhasil dibuat! Stok sudah berkurang dan masuk ke riwayat.';
+                    } else {
+                        echo '❌ Gagal membuat pesanan. ';
+                        if (isset($_GET['error'])) {
+                            echo 'Error: ' . htmlspecialchars($_GET['error']);
+                        }
+                    }
+                ?>
+            </div>
+        <?php endif; ?>
+        
         <div class="top-row">
             <section class="card-section riwayat-section">
                 <h3>Riwayat Pembelian</h3>
@@ -139,14 +154,14 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
                         <div class="img-placeholder">🌄</div>
                         <div class="menu-detail">
                             <input type="hidden" name="id_produk" value="<?php echo $menu['id_produk']; ?>" />
-                            <input type="hidden" name="total_bayar" value="<?php echo $menu['harga_produk']; ?>" />
                             
                             <h4><?php echo $menu['nama_produk']; ?></h4>
                             <span class="sold-count">Terjual <?php echo $menu['terjual']; ?> porsi (Sisa: <?php echo $menu['stok_produk']; ?>)</span>
                             <span class="menu-price">Rp <?php echo number_format($menu['harga_produk'], 0, ',', '.'); ?></span>
                             
                             <div class="action-buy">
-                                <input type="number" name="jumlah_beli" value="1" min="1" max="<?php echo $menu['stok_produk']; ?>" required class="input-qty" />
+                                <input type="number" name="jumlah_beli" value="1" min="1" max="<?php echo $menu['stok_produk']; ?>" required class="input-qty" onchange="updateTotal(this, <?php echo $menu['harga_produk']; ?>)" />
+                                <span class="total-price">Total: <strong>Rp <?php echo number_format($menu['harga_produk'], 0, ',', '.'); ?></strong></span>
                                 <button type="submit" name="checkout" class="btn-buy">Beli</button>
                             </div>
                         </div>
@@ -157,6 +172,17 @@ $pesan_lagi = mysqli_fetch_array($queryPesanLagi);
         </section>
 
     </main>
+
+<script>
+function updateTotal(input, hargaSatuan) {
+    const jumlah = parseInt(input.value) || 1;
+    const total = hargaSatuan * jumlah;
+    const span = input.parentElement.querySelector('.total-price strong');
+    if (span) {
+        span.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+    }
+}
+</script>
 
 </body>
 
