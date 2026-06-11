@@ -84,6 +84,13 @@ if(isset($_POST['checkout'])){
             throw new Exception('Stok gudang tidak ditemukan untuk produk ini');
         }
 
+        // 4b. Update stok di tabel produk juga (sinkronisasi dengan tampilan frontend)
+        $sql4b = "UPDATE produk SET stok_produk = stok_produk - $jumlah_beli WHERE id_produk = '$id_produk'";
+        $q4b = mysqli_query($conn_gudang, $sql4b);
+        if (!$q4b) {
+            throw new Exception('Gagal update stok produk: ' . mysqli_error($conn_gudang));
+        }
+
         // 5. Catat ke Laporan Penjualan
         $sql5 = "INSERT INTO laporan_penjualan (id_produk, jumlah_terjual, tanggal_laporan) VALUES ('$id_produk', '$jumlah_beli', CURDATE())";
         $q5 = mysqli_query($conn_gudang, $sql5);

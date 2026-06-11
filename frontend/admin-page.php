@@ -53,7 +53,7 @@ $total_data = mysqli_num_rows($queryProduk);
                     <div class="item-row-detail">
                         <div class="row-title-flex">
                             <span class="item-name"><?php echo $row_stok['nama_produk']; ?></span>
-                            <span class="item-qty">jumlah</span>
+                            <span class="item-qty">Stok: <?php echo $stok; ?></span>
                         </div>
                         <progress value="<?php echo $stok; ?>" max="100"></progress>
                     </div>
@@ -71,7 +71,7 @@ $total_data = mysqli_num_rows($queryProduk);
                     <div class="item-row-detail">
                         <div class="row-title-flex">
                             <span class="item-name">nama bahan</span>
-                            <span class="item-qty">jumlah</span>
+                            <span class="item-qty">Stok: <?php echo ($i == 1) ? 90 : (($i == 2) ? 20 : 65); ?></span>
                         </div>
                         <progress value="<?php echo ($i == 1) ? 90 : (($i == 2) ? 20 : 65); ?>" max="100"></progress>
                     </div>
@@ -91,7 +91,7 @@ $total_data = mysqli_num_rows($queryProduk);
                 <table class="modern-table">
                     <thead>
                         <tr>
-                            <th>Nama Supplier</th>
+                            <th>ID Supplier</th>
                             <th>ID Produk</th>
                             <th>Nama Produk</th>
                             <th>Harga</th>
@@ -122,7 +122,7 @@ $total_data = mysqli_num_rows($queryProduk);
                             // Dummy data tabel biar persis seperti sketsa gambar mockup kamu
                             for ($i=1; $i<=3; $i++) {
                                 echo "<tr>";
-                                echo "<td>id supplier</td>";
+                                echo "<td>supplier</td>";
                                 echo "<td>id produk</td>";
                                 echo "<td>nama produk</td>";
                                 echo "<td>harga</td>";

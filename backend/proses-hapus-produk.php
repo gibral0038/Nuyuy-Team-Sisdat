@@ -29,30 +29,34 @@ try {
         throw new Exception('Produk tidak ditemukan / tidak boleh dihapus.');
     }
 
-    // 2) Hapus transaksi terkait di db_penjualan (detail_pesanan -> pesanan)
-    //    Karena skema dump membuat FK detail_pesanan -> pesanan ON DELETE CASCADE,
-    //    kita aman hapus detail_pesanan terlebih dulu.
-    $delDetailsSql = "DELETE dp
-                       FROM detail_pesanan dp
-                       JOIN pesanan pn ON pn.id_pesanan = dp.id_pesanan
-                       WHERE dp.id_produk = '$id_produk'";
+    // 2) Ambil daftar pesanan yang terkait dengan produk ini SEBELUM delete detail
+    $getOrdersSql = "SELECT DISTINCT pn.id_pesanan
+                     FROM pesanan pn
+                     JOIN detail_pesanan dp ON pn.id_pesanan = dp.id_pesanan
+                     WHERE dp.id_produk = '$id_produk'";
+    $qOrders = mysqli_query($conn_penjualan, $getOrdersSql);
+    $orderIds = [];
+    while($row = mysqli_fetch_assoc($qOrders)) {
+        $orderIds[] = $row['id_pesanan'];
+    }
+
+    // 2b) Hapus detail pesanan yang terkait produk ini
+    $delDetailsSql = "DELETE FROM detail_pesanan WHERE id_produk = '$id_produk'";
     $qDelDetails = mysqli_query($conn_penjualan, $delDetailsSql);
     if (!$qDelDetails) {
         throw new Exception('Gagal membersihkan detail_pesanan terkait.');
     }
 
-    // 3) Hapus pesanan yang sekarang sudah tidak punya detail (opsional).
-    //    Untuk mencegah delete berlebihan, hapus hanya pesanan yang id-nya pernah terkait produk ini.
-    $delOrdersSql = "DELETE pn
-                      FROM pesanan pn
-                      WHERE pn.id_pesanan IN (
-                          SELECT dp2.id_pesanan
-                          FROM detail_pesanan dp2
-                          WHERE dp2.id_produk = '$id_produk'
-                      )";
-    // Catatan: setelah step 2, detail_pesanan untuk produk sudah hilang,
-    // sehingga subquery mungkin kosong. Ini tidak masalah.
-    mysqli_query($conn_penjualan, $delOrdersSql);
+    // 3) Hapus pesanan yang sekarang sudah tidak punya detail lagi (pesanan kosong)
+    if (count($orderIds) > 0) {
+        $orderIdList = implode(',', $orderIds);
+        $delOrdersSql = "DELETE FROM pesanan 
+                         WHERE id_pesanan IN ($orderIdList)
+                         AND id_pesanan NOT IN (
+                             SELECT DISTINCT id_pesanan FROM detail_pesanan
+                         )";
+        mysqli_query($conn_penjualan, $delOrdersSql);
+    }
 
     // 4) Hapus produk di db_gudang
     // Karena gudang.sql punya FK ON DELETE CASCADE (best_seller/gudang/laporan_penjualan), stok ikut terhapus.

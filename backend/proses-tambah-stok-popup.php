@@ -42,6 +42,16 @@ try {
         throw new Exception('Gagal menambah stok.');
     }
 
+    // Update stok produk juga (sinkronisasi dengan tampilan frontend)
+    $sqlIncProduk = "UPDATE produk
+                     SET stok_produk = stok_produk + '$jumlah_tambah'
+                     WHERE id_produk = '$id_produk'";
+
+    $qIncProduk = mysqli_query($conn_gudang, $sqlIncProduk);
+    if (!$qIncProduk) {
+        throw new Exception('Gagal update stok produk.');
+    }
+
     mysqli_commit($conn_gudang);
     header("Location: ../frontend/supplier-page.php?pesan=tambah_stok_sukses");
     exit();
